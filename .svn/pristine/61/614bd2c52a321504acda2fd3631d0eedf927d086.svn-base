@@ -1,0 +1,77 @@
+package com.chihuobao.kuaidian.base.bean;
+
+import java.util.Date;
+
+import com.chihuobao.kuaidian.constans.Constans;
+
+/**
+ * 换台Bean
+ */
+public class HuanTaiBean {
+	
+	private String tingbh;
+	private String taibh;//台编号
+	private String newtingbh;//新庭编号
+	private String newtaibh;//新台编号
+	private String lsh;//流水号
+	private String starttime;//建立时间
+	
+	public HuanTaiBean() {}
+	public HuanTaiBean(Canyin_Shop_Diningtable oldTable, String newTingbh, String newTaibh) {
+		this.tingbh = oldTable.getFloorcode();
+		this.taibh = oldTable.getCode();
+		this.newtingbh = newTingbh;
+		this.newtaibh = newTaibh;
+		this.lsh = oldTable.getLsh();
+		this.starttime = Constans.DATE_FORMAT.format(new Date());
+	}
+	
+	public String getTingbh() {
+		return tingbh;
+	}
+
+	public void setTingbh(String tingbh) {
+		this.tingbh = tingbh;
+	}
+
+	public String getTaibh() {
+		return taibh;
+	}
+
+	public void setTaibh(String taibh) {
+		this.taibh = taibh;
+	}
+
+	public String getNewtingbh() {
+		return newtingbh;
+	}
+
+	public void setNewtingbh(String newtingbh) {
+		this.newtingbh = newtingbh;
+	}
+
+	public String getNewtaibh() {
+		return newtaibh;
+	}
+
+	public void setNewtaibh(String newtaibh) {
+		this.newtaibh = newtaibh;
+	}
+
+	public String getLsh() {
+		return lsh;
+	}
+
+	public void setLsh(String lsh) {
+		this.lsh = lsh;
+	}
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
+	}
+
+}

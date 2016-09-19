@@ -1,0 +1,14 @@
+package com.fangbian365.kuaidi.mod.asynctask.download.http;
+
+public abstract interface HttpProviderListener
+{
+  public abstract boolean onStart(long contentLen);
+
+  public abstract boolean onAdvance(byte[] paramArrayOfByte, int start, int len);
+
+  public abstract void onFinished();
+
+  public abstract void onFail(NetworkResult paramSimpleNetworkResult, Throwable paramThrowable);
+  
+  public abstract long getFileSize();
+}

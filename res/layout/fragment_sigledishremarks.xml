@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <com.fangbian365.kuaidi.ui.uisupport.AutoBreakLayout
+        android:id="@+id/remarks_auto_break"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp" >
+    </com.fangbian365.kuaidi.ui.uisupport.AutoBreakLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp" >
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/remark_input_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/remark_input_height"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/bg_remark_input"
+                android:gravity="left"
+                android:hint="请输入自定义备注"
+                android:inputType="text"
+                android:maxLength="50"
+                android:maxLines="5"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/sure_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/whole_remarks_btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/selector_bg_black"
+        android:gravity="center"
+        android:text="确 定"
+        android:textColor="@drawable/selector_color_sure_wholeremarks"
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sure_tv"
+        android:layout_below="@id/relativeLayout1"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <RadioButton
+                android:id="@+id/tv_wait_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_status_mark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="等叫"
+                android:gravity="center"
+                android:button="@null"
+                android:checked="true"
+                android:textColor="@drawable/selector_color_remarks_items"
+                android:textSize="@dimen/search_hotword_textSize" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <RadioButton
+                android:id="@+id/tv_that_is"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_status_mark"
+                android:text="即起"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:button="@null"
+                android:textColor="@drawable/selector_color_remarks_items"
+                android:textSize="@dimen/search_hotword_textSize" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

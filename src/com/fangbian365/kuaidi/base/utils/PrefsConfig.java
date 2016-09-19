@@ -1,0 +1,208 @@
+package com.fangbian365.kuaidi.base.utils;
+
+import android.content.Context;
+
+import com.fangbian365.kuaidi.base.CHBApp;
+import com.fangbian365.kuaidi.base.bean.BusinessDetail;
+import com.fangbian365.kuaidi.base.bean.DeviceNum;
+import com.fangbian365.kuaidi.base.bean.DevicePwd;
+import com.fangbian365.kuaidi.base.bean.RootPwd;
+import com.fangbian365.kuaidi.base.bean.UserInfo;
+import com.fangbian365.kuaidi.base.log.FrameLog;
+
+public class PrefsConfig {
+	private static String TAG = "Config";
+
+	public static boolean login_status;
+	public static String workerId;
+	public static String workerNum;
+	public static String workerName;
+	public static String duty;
+	public static String deptCode;
+	public static String deptName;
+	public static String key;
+	public static String mlFlag;
+	public static String disCountFlag;
+	public static String authCode;
+	public static boolean isCheckDevPwd;
+	public static boolean isCheck;
+	public static String ShopId;
+	public static String rootPwd;
+	public static String devNum;
+	public static String devPwd;
+	public static String BusinessId;
+	public static String Title;
+	public static String Mobile;
+	public static String Tel;
+	public static String ShopName;
+	public static String CityName;
+	public static String ShopAddress;
+	public static String Yzm;
+	public static boolean isScanQR;//是否扫描
+	public static String danNo;
+	
+	public static void loadFromPref(Context context) {
+		
+		login_status = PrefsUtils.loadPrefBoolean(context, "login_status", false);
+		workerId = PrefsUtils.loadPrefString(context, "workerId", "");
+		workerNum = PrefsUtils.loadPrefString(context, "workerNum", "");
+		workerName = PrefsUtils.loadPrefString(context, "workerName", "");
+		duty = PrefsUtils.loadPrefString(context, "duty", "");
+		deptCode = PrefsUtils.loadPrefString(context, "deptCode", "");
+		deptName = PrefsUtils.loadPrefString(context, "deptName", "");
+		key = PrefsUtils.loadPrefString(context, "key", "");
+		mlFlag = PrefsUtils.loadPrefString(context, "mlFlag", "");
+		disCountFlag = PrefsUtils.loadPrefString(context, "disCountFlag", "");
+		authCode = PrefsUtils.loadPrefString(context, "authCode", "");
+		isCheckDevPwd = PrefsUtils.usePrefBoolean(context, "isCheckDevPwd", false);
+		isCheck = PrefsUtils.usePrefBoolean(context, "isCheck", false);
+		ShopId = PrefsUtils.loadPrefString(context, "ShopId", "");
+		rootPwd = PrefsUtils.loadPrefString(context, "rootPwd", "");
+		devNum = PrefsUtils.loadPrefString(context, "devNum", "");
+		devPwd = PrefsUtils.loadPrefString(context, "devPwd", "");
+		BusinessId = PrefsUtils.loadPrefString(context, "BusinessId", "");
+		Title = PrefsUtils.loadPrefString(context, "Title", "");
+		Mobile = PrefsUtils.loadPrefString(context, "Mobile", "");
+		Tel = PrefsUtils.loadPrefString(context, "Tel", "");
+		ShopName = PrefsUtils.loadPrefString(context, "ShopName", "");
+		CityName = PrefsUtils.loadPrefString(context, "CityName", "");
+		ShopAddress = PrefsUtils.loadPrefString(context, "ShopAddress", "");
+		Yzm = PrefsUtils.loadPrefString(context, "Yzm", "");
+		isScanQR = PrefsUtils.loadPrefBoolean(context, "isScanQR", false);
+	}
+
+	public static void saveToPref(Context context) {
+		
+		PrefsUtils.savePrefString(context, "workerId", workerId);
+		PrefsUtils.savePrefString(context, "workerNum", workerNum);
+		PrefsUtils.savePrefString(context, "workerName", workerName);
+		PrefsUtils.savePrefString(context, "duty", duty);
+		PrefsUtils.savePrefString(context, "deptCode", deptCode);
+		PrefsUtils.savePrefString(context, "deptName", deptName);
+		PrefsUtils.savePrefString(context, "key", key);
+		PrefsUtils.savePrefBoolean(context, "login_status", login_status);
+		PrefsUtils.savePrefString(context, "mlFlag", mlFlag);
+		PrefsUtils.savePrefString(context, "disCountFlag", disCountFlag);
+		PrefsUtils.savePrefString(context, "authCode", authCode);
+		PrefsUtils.savePrefBoolean(context, "isCheckDevPwd", isCheckDevPwd);
+		PrefsUtils.savePrefBoolean(context, "isCheck", isCheck);
+		PrefsUtils.savePrefString(context, "ShopId", ShopId);
+		PrefsUtils.savePrefString(context, "rootPwd", rootPwd);
+		PrefsUtils.savePrefString(context, "devNum", devNum);
+		PrefsUtils.savePrefString(context, "devPwd", devPwd);
+		PrefsUtils.savePrefString(context, "BusinessId", BusinessId);
+		PrefsUtils.savePrefString(context, "Title", Title);
+		PrefsUtils.savePrefString(context, "Mobile", Mobile);
+		PrefsUtils.savePrefString(context, "Tel", Tel);
+		PrefsUtils.savePrefString(context, "ShopName", ShopName);
+		PrefsUtils.savePrefString(context, "CityName", CityName);
+		PrefsUtils.savePrefString(context, "ShopAddress", ShopAddress);
+		PrefsUtils.savePrefString(context, "Yzm", Yzm);
+		PrefsUtils.savePrefBoolean(context, "isScanQR", isScanQR);
+		PrefsUtils.savePrefString(context, "danNo", danNo);
+	}
+	
+	public static void saveUser(UserInfo userInfo) {
+//		u_cid = user.u_cid;
+		workerId = userInfo.getWorkerId();
+		workerNum = userInfo.getWorkerNum();
+		workerName = userInfo.getWorkerName();
+		FrameLog.d("AAAA", "2222" + workerName);
+		
+		duty = userInfo.getDuty();
+		deptCode = userInfo.getDeptCode();
+		deptName = userInfo.getDeptName();
+		key = userInfo.getKey();
+		mlFlag = userInfo.getMlFlag();
+		disCountFlag = userInfo.getDisCountFlag();
+		authCode = userInfo.getAuthCode();
+		login_status = true;
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveShopCheck(){
+		isCheck = true;
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void confirmDevPwd(){
+		isCheckDevPwd = true;
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void clearUser() {
+		workerId = "";
+		workerNum = "";
+		workerName = "";
+		duty = "";
+		deptCode = "";
+		deptName = "";
+		key = "";
+		mlFlag = "";
+		disCountFlag = "";
+		authCode = "";
+		login_status = false;
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveShopId(String shopid) {
+		ShopId = shopid;
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveRootPwd(RootPwd pwd){
+		rootPwd = pwd.getRootPwd();
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveDevNum(DeviceNum num){
+		devNum = num.getDevNum();
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveDevPwd(DevicePwd pwd){
+		devPwd = pwd.getDevPwd();
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveBusinessDetail(BusinessDetail detail) {
+		BusinessId = detail.getBusinessId();
+		Title = detail.getTitle();
+		Mobile = detail.getMobile();
+		Tel = detail.getTel();
+		ShopName = detail.getShopName();
+     	CityName = detail.getCityName();
+		ShopAddress = detail.getShopAddress();
+		Yzm = detail.getYzm();
+//		Rwmbangding = detail.getRwmbangding();
+//		RwmIphone = detail.getRwmIphone();
+//		RwmAndroid = detail.getRwmAndroid();
+		ShopId = detail.getShopId();
+
+		saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveScan(boolean isScan){
+		isScanQR = isScan;
+	   	saveToPref(CHBApp.getAppContext());
+	}
+	
+	public static void saveRemarks(String lsh,String remarks){
+		PrefsUtils.savePrefString(CHBApp.getAppContext(), lsh, remarks);
+	}
+	public static String getRemarksByLsh(String lsh){
+		return PrefsUtils.loadPrefString(CHBApp.getAppContext(), lsh, "");
+	}
+	
+	public static void clearRemarks(String lsh){
+		PrefsUtils.clearPreByKey(CHBApp.getAppContext(), lsh);
+	}
+	
+	public static void loadScanQR(Context context){
+		isScanQR = PrefsUtils.loadPrefBoolean(context, "isScanQR", false);
+	}
+
+	public static void saveDanNo(Context context, String key, String danNo){
+		PrefsUtils.loadPrefString(context, key, danNo);
+	}
+}

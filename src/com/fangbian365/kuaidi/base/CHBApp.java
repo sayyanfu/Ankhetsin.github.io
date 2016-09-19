@@ -1,0 +1,243 @@
+package com.fangbian365.kuaidi.base;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.xutils.DbManager;
+import org.xutils.DbManager.DaoConfig;
+import org.xutils.x;
+
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import cn.jpush.android.api.JPushInterface;
+
+import com.cardinfolink.cashiersdk.model.InitData;
+import com.cardinfolink.cashiersdk.sdk.CashierSdk;
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.base.log.FrameLog;
+import com.fangbian365.kuaidi.base.log.Logger;
+import com.fangbian365.kuaidi.base.utils.FileUtils;
+import com.fangbian365.kuaidi.base.utils.PrefsConfig;
+import com.fangbian365.kuaidi.base.utils.SysInfo;
+import com.fangbian365.kuaidi.constans.Constans;
+import com.fangbian365.kuaidi.mod.dirmanager.DirType;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+
+public class CHBApp extends Application {
+	private static String TAG = "CHBApp";
+	// 初始化文件系统是否失
+	public boolean mInitFSFailed = false;
+	private static Context mContext = null;
+	public boolean isDebuggable = true;
+	private static CHBApp mApp = null;
+	private Handler mainThreadHandler = null;
+	private DbManager dbManager;
+	private DaoConfig daoConfig = null;
+
+	public static Context getAppContext() {
+		return mContext;
+	}
+
+	public Handler getMainThreadHandler() {
+		return mainThreadHandler;
+	}
+
+	public static CHBApp getInstance() {
+		return mApp;
+	}
+
+	public static final String ACTION_CONNECT_STATUS = "action.connect.status";
+
+	@Override
+	public void onCreate() {
+		mApp = this;
+		mContext = this.getApplicationContext();
+
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(this);
+
+		x.Ext.init(this);// 初始化xtils
+		x.Ext.setDebug(false);// 是否输出Debug日志
+		
+		
+		
+		// 设置日志权限
+		FrameLog.setDebug(isDebuggable);
+		FrameLog.trace(isDebuggable);
+		FrameLog.getLogger().setLevel(Logger.VERBOSE);
+
+		if (isDebuggable) {
+			Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		}
+
+		if (mainThreadHandler == null)
+			mainThreadHandler = new Handler();
+
+		initImageLoader(mContext);
+
+		super.onCreate();
+	}
+
+	/**
+	 * 初始化dbManager
+	 */
+	private void setDbManager() {
+		if (daoConfig == null) {
+			initDb();
+		}
+		dbManager = x.getDb(daoConfig);// 初始化DB操作类
+	}
+
+	public DbManager getDbManager() {
+
+		if (dbManager != null) {
+			return this.dbManager;
+		} else {
+			setDbManager();
+			return this.dbManager;
+		}
+	}
+
+	public synchronized void initApp(Activity activity) {
+		if (mInitFSFailed) {
+			return;
+		}
+		// 加载配置
+		try {
+			PrefsConfig.loadFromPref(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		mInitFSFailed = !SysInfo.init(activity);
+		if (mInitFSFailed) {
+			return;
+		}
+
+		if (copyDatabase(Constans.DB_PATH + "/" + Constans.DB_NAME)) {
+			FrameLog.i(TAG, "数据库已经拷贝完毕");
+		} else {
+			FrameLog.i(TAG, "数据库拷贝不成功");
+		}
+
+		initDb();
+	}
+	
+	private boolean copyDatabase(String dbfile) {
+		InputStream is = null;
+		FileOutputStream fos = null;
+        try {
+        	File file = new File(dbfile);
+            if (!file.exists()) {
+            	is = mContext.getResources().openRawResource(R.raw.client);
+            	if(is == null){
+            		FrameLog.e("DB-InputStream", "is null");
+            		return false;
+            	}
+            	fos = new FileOutputStream(dbfile);
+                byte[] buffer = new byte[1024];
+                int count = 0;
+                while ((count =is.read(buffer)) > 0) {
+                    fos.write(buffer, 0, count);
+                	fos.flush();
+                }
+            }
+            return true;
+        } catch (FileNotFoundException e) {
+        	FrameLog.e("cc", "File not found");
+            e.printStackTrace();
+        } catch (IOException e) {
+        	FrameLog.e("cc", "IO exception");
+            e.printStackTrace();
+        } catch (Exception e){
+        	FrameLog.e("cc", "exception "+e.toString());
+        } finally {
+        	try {
+        		fos.close();
+                is.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+        }
+        return false;
+    }
+
+	public void initImageLoader(Context context) {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.ic_launcher)
+				.showImageForEmptyUri(R.drawable.ic_launcher)
+				//
+				.showImageOnFail(R.drawable.ic_launcher)
+				// resource
+				.cacheInMemory(true).cacheOnDisk(true).considerExifParams(true)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.imageScaleType(ImageScaleType.EXACTLY)
+				// .displayer(new FadeInBitmapDisplayer(150, true, false,
+				// false))
+				.build();
+
+		File cacheDir = SysInfo.getDirManager().getDir(DirType.CACHE);
+		if (!cacheDir.exists()) {
+			cacheDir.mkdir();
+		}
+
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
+		// or you can create default configuration by
+		// ImageLoaderConfiguration.createDefault(this);
+		// method.
+		ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(
+				context)
+				.threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.memoryCache(new LruMemoryCache(4 * 1024 * 1024))
+				.denyCacheImageMultipleSizesInMemory()
+				.memoryCacheExtraOptions(200, 200)
+				.threadPoolSize(3)
+				.imageDownloader(
+						new BaseImageDownloader(context, 5 * 1000, 15 * 1000))
+				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+				.diskCacheSize(50 * 1024 * 1024)
+				// 50 MiB
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				//.discCache(new UnlimitedDiskCache(cacheDir))
+				.diskCache(new UnlimitedDiskCache(cacheDir))
+				.defaultDisplayImageOptions(options);
+		// config.writeDebugLogs(); // Remove for release app
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config.build());
+	}
+
+	/**
+	 * 初始化DB
+	 */
+	private void initDb() {
+		daoConfig = new DaoConfig();
+		daoConfig.setDbDir(new File(Constans.DB_PATH + "/"));
+		daoConfig.setDbName(Constans.DB_NAME);
+		daoConfig.setDbVersion(Constans.DBVERSION);
+	}
+
+	/**
+	 * 退出程序杀掉进程
+	 */
+	public void exitApp() {
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(0);
+	}
+
+}

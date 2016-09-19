@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/main_bg"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/rebind_shop_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bg_setting_popup_top"
+            android:gravity="center_vertical"
+            android:text="重新绑定店铺"
+            android:textColor="@drawable/selector_color_text_popup" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/setting_popup_devide" />
+
+        <TextView
+            android:id="@+id/change_dev_pwd_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bg_setting_popup_center"
+            android:gravity="center_vertical"
+            android:text="修改设备密码"
+            android:textColor="@drawable/selector_color_text_popup" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/setting_popup_devide" />
+
+        <TextView
+            android:id="@+id/change_dev_num_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bg_setting_popup_center"
+            android:gravity="center_vertical"
+            android:text="修改设备编号"
+            android:textColor="@drawable/selector_color_text_popup" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/setting_popup_devide" />
+
+        <TextView
+            android:id="@+id/manual_update_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bg_setting_popup_bottom"
+            android:gravity="center_vertical"
+            android:text="手动更新数据"
+            android:textColor="@drawable/selector_color_text_popup" />
+    </LinearLayout>
+
+</RelativeLayout>

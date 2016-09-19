@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="40dp" >
+
+    <TextView
+        android:id="@+id/tv_tip_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/offline_dialog_text"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_ok"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tv_ok_height"
+        android:layout_below="@id/tv_tip_msg"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/selector_bg_login"
+        android:gravity="center"
+        android:text="@string/btn_sure"
+        android:textColor="@drawable/selector_text_login"
+        android:textSize="16sp" />
+
+</RelativeLayout>

@@ -1,0 +1,98 @@
+/**
+ * 菜品分类
+ */
+
+package com.fangbian365.kuaidi.base.bean;
+
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
+
+@Table(name = "canyin_shop_product_type")
+public class Canyin_Shop_Product_Type extends PopBean {
+	public Canyin_Shop_Product_Type() {
+		super("");
+	}
+
+	@Column(name = "id", isId = true)
+	private Integer id;
+	@Column(name = "typeId")
+	private String typeId;// 小类Id
+	@Column(name = "typeName")
+	private String typeName;
+	@Column(name = "parentId")
+	private String parentId;// 大类Id
+	@Column(name = "orderid")
+	private Integer orderid;
+
+	private int type = 1;// 0为全部菜品，1为分类菜品，2为历史临时菜
+
+	private boolean isClick;
+	public boolean isClick() {
+		return isClick;
+	}
+
+	public void setClick(boolean isClick) {
+		this.isClick = isClick;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	// id
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	// typeId
+	public void setTypeid(String typeid) {
+		this.typeId = typeid;
+	}
+
+	public String getTypeid() {
+		return typeId;
+	}
+
+	// typeName
+	public void setTypename(String typename) {
+		this.typeName = typename;
+	}
+
+	public String getTypename() {
+		return typeName;
+	}
+
+	// parentId
+	public void setParentid(String parentid) {
+		this.parentId = parentid;
+	}
+
+	public String getParentid() {
+		return parentId;
+	}
+
+	// orderid
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
+	}
+
+	public Integer getOrderid() {
+		return orderid;
+	}
+
+	@Override
+	public String toString() {
+		return "Canyin_Shop_Product_Type [id=" + id + ", typeId=" + typeId
+				+ ", typeName=" + typeName + ", parentId=" + parentId
+				+ ", orderid=" + orderid + ", type=" + type + ", isClick="
+				+ isClick + "]";
+	}
+}

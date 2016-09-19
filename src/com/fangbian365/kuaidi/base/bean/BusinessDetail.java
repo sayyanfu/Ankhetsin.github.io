@@ -1,0 +1,140 @@
+package com.fangbian365.kuaidi.base.bean;
+
+import java.io.Serializable;
+
+/**
+ * 商家详情获取bean
+ */
+public class BusinessDetail implements Serializable {
+	private static final long serialVersionUID = 1995746425135350685L;
+	private String rwmAndroid;
+
+	private String shopAddress;
+
+	private String cityId;
+
+	private String shopName;
+
+	private String cityName;
+
+	private String tel;
+
+	private String rwmbangding;
+
+	private String rwmIphone;
+
+	private String businessId;
+
+	private String yzm;
+
+	private String Title;
+
+	private String mobile;
+	
+	private String shopId;
+	
+	public void setRwmAndroid(String rwmAndroid) {
+		this.rwmAndroid = rwmAndroid;
+	}
+
+	public String getRwmAndroid() {
+		return this.rwmAndroid;
+	}
+
+	public void setShopAddress(String shopAddress) {
+		this.shopAddress = shopAddress;
+	}
+
+	public String getShopAddress() {
+		return this.shopAddress;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	public String getCityId() {
+		return this.cityId;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public String getShopName() {
+		return this.shopName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public String getCityName() {
+		return this.cityName;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getTel() {
+		return this.tel;
+	}
+
+	public void setRwmbangding(String rwmbangding) {
+		this.rwmbangding = rwmbangding;
+	}
+
+	public String getRwmbangding() {
+		return this.rwmbangding;
+	}
+
+	public void setRwmIphone(String rwmIphone) {
+		this.rwmIphone = rwmIphone;
+	}
+
+	public String getRwmIphone() {
+		return this.rwmIphone;
+	}
+
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
+	}
+
+	public String getBusinessId() {
+		return this.businessId;
+	}
+
+	public void setYzm(String yzm) {
+		this.yzm = yzm;
+	}
+
+	public String getYzm() {
+		return this.yzm;
+	}
+
+	public void setTitle(String Title) {
+		this.Title = Title;
+	}
+
+	public String getTitle() {
+		return this.Title;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getMobile() {
+		return this.mobile;
+	}
+	
+	public String getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
+	}
+
+}

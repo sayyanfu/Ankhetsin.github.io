@@ -1,0 +1,265 @@
+package com.chihuobao.kuaidian.ui.fragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.chihuobao.kuaidian.R;
+import com.chihuobao.kuaidian.base.CHBApp;
+import com.chihuobao.kuaidian.base.bean.Canyin_Shop_Taste;
+import com.chihuobao.kuaidian.base.log.FrameLog;
+import com.chihuobao.kuaidian.base.utils.PrefsConfig;
+import com.chihuobao.kuaidian.base.utils.SysWorkTools;
+import com.chihuobao.kuaidian.constans.Constans;
+import com.chihuobao.kuaidian.ui.receiver.HomeBroadcastReceiver;
+import com.chihuobao.kuaidian.ui.uisupport.AutoBreakLayout;
+import com.umeng.analytics.MobclickAgent;
+
+/**
+ * 整单备注界面
+ */
+public class WholeDishRemarkFragment extends HeaderFragment implements
+		OnCheckedChangeListener {
+	private EditText mCumtomsEt;
+	private TextView mSureTv;// 确认添加
+	private AutoBreakLayout mRemarkLayout;
+	private DbManager dbManager;
+	private List<Canyin_Shop_Taste> tasteList; // 备注数据
+	private String tasteStr = "";
+	private final String TAG = WholeDishRemarkFragment.class.getSimpleName();
+	private List<String> remarkList = new ArrayList<String>();;
+	private String lsh;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			tasteStr = bundle.getString(Constans.KEY_REMARK);
+			
+			lsh = bundle.getString("lsh");
+			if(!TextUtils.isEmpty(tasteStr)) {
+				String[] tasteArray = tasteStr.split(",");
+				for (String remark : tasteArray) {
+					remarkList.add(remark);
+				}
+			}   
+		}
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		ViewGroup contentView = (ViewGroup) inflater.inflate(
+				R.layout.fragment_wholedishremarks, null);
+		mRemarkLayout = (AutoBreakLayout) contentView
+				.findViewById(R.id.remarks_auto_break);
+		mCumtomsEt = (EditText) contentView.findViewById(R.id.remark_input_et);
+		mCumtomsEt.addTextChangedListener(watcher);
+		mSureTv = (TextView) contentView.findViewById(R.id.sure_tv);
+		mSureTv.setOnClickListener(mSureBtnListener);
+		dbManager = CHBApp.getInstance().getDbManager();
+		try {
+			tasteList = dbManager.findAll(Canyin_Shop_Taste.class);
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
+
+		
+
+		return super.onCreateView(inflater, contentView, savedInstanceState);
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		updateRemarkView();
+		
+		if (remarkList != null && remarkList.size() > 0) {
+			String sRemarkString = "";
+			for (String remark : remarkList) {
+				sRemarkString += remark;
+			}
+			
+			mCumtomsEt.setText(sRemarkString);
+			mCumtomsEt.setSelection(sRemarkString.length());
+		}
+		
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		MobclickAgent.onPageStart(TAG);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(TAG);
+	}
+
+	@Override
+	protected String getTitle() {
+		return getString(R.string.whole_remarks);
+	}
+
+	@Override
+	protected int getMenuResId() {
+		return 0;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode) {
+
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			close();
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		SysWorkTools.closeKeyboard(mCumtomsEt);
+	}
+	
+	/**
+	 * 确认添加
+	 */
+	private OnClickListener mSureBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			tasteStr = "";
+			StringBuilder sb = new StringBuilder();
+			for (Canyin_Shop_Taste taste : tasteList) {
+				if (taste.isChoosed()) {
+					sb.append(taste.getTastename());
+					sb.append(",");
+				} else {
+					
+				}
+				FrameLog.e(TAG, sb.toString()+ "&&&&&&&&&&&&7");
+			}
+			String customs = mCumtomsEt.getText().toString().trim();
+			if (!TextUtils.isEmpty(customs)) {
+				sb.append(customs);
+				if (sb.length() > 0) {
+					tasteStr = sb.substring(0, sb.length());
+				}
+			} else {
+				if (sb.length() > 0) {
+					tasteStr = sb.substring(0, sb.length() - 1);
+				}
+			}
+			PrefsConfig.saveRemarks(lsh, tasteStr);
+			HomeBroadcastReceiver.onDataTransfer(Constans.TYPE_WHOLE_TASTE, tasteStr);
+			close();
+		}
+	};
+
+	/**
+	 * 搜索功能监听
+	 */
+	TextWatcher watcher = new TextWatcher() {
+
+		@Override
+		public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+		}
+
+		@Override
+		public void afterTextChanged(Editable arg0) {
+
+		}
+	};
+
+	private void updateRemarkView() {
+		mRemarkLayout.removeAllViews();
+		if (tasteList == null) {
+			return;
+		}
+
+		View view = null;
+		CheckBox hotWordView = null;
+
+		if (tasteList != null && tasteList.size() > 0) {
+			for (Canyin_Shop_Taste item : tasteList) {
+				if (TextUtils.isEmpty(item.getTastename())) {
+					continue;
+				}
+				view = View.inflate(getActivity(), R.layout.library_hotwords_item2, null);
+
+				hotWordView = (CheckBox) view;
+				hotWordView.setText(item.getTastename());
+				hotWordView.setOnCheckedChangeListener(this);
+				FrameLayout.LayoutParams lp = new LayoutParams(
+						FrameLayout.LayoutParams.WRAP_CONTENT,
+						FrameLayout.LayoutParams.WRAP_CONTENT); // 必须设置参数.否则是fill_parent
+				mRemarkLayout.addView(hotWordView, lp);
+				
+				for(int i=0 ; i < remarkList.size() ; i++) {
+					if(remarkList.get(i).equals(item.getTastename())) {
+						hotWordView.setChecked(true);
+						remarkList.remove(i);
+						break;
+					} else {
+						hotWordView.setChecked(false);
+					}
+				}
+			}
+			mRemarkLayout.setVisibility(View.VISIBLE);
+		} else {
+			mRemarkLayout.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		String taste = buttonView.getText().toString();
+		for (Canyin_Shop_Taste item : tasteList) {
+			if (item.getTastename().equals(taste)) {
+				if (item.isChoosed()) {
+					item.setChoosed(false);
+					FrameLog.e(TAG, "f------------");
+				} else {
+					item.setChoosed(true);
+					FrameLog.e(TAG, "t------------");
+				}
+				break;
+			}
+		}
+
+	}
+
+}

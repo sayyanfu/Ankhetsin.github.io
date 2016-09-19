@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp" >
+
+        <LinearLayout
+            android:id="@+id/toplayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_oepn_table_person_num" >
+
+            <ImageView
+                android:id="@+id/textView1"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/bg_table_id_opentable" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:text="台位名称："
+                android:gravity="right|center_vertical"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/table_id_tv"
+                android:layout_width="210dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:singleLine="true"
+                android:text=""
+                android:paddingLeft="4dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/toplayout"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_oepn_table_person_num">
+
+            <ImageView
+                android:id="@+id/textView4"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/bg_person_num_opentable" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:text="人         数："
+                android:gravity="right|center_vertical"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/person_num_et"
+                android:layout_width="210dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:inputType="number"
+                android:digits="0123456789"
+                android:imeOptions="actionDone"
+                android:maxLength="4"
+                android:singleLine="true"
+                android:gravity="left|center_vertical"
+                android:text=""
+                android:hint="请输入人数"
+                android:textColor="@color/black"
+                android:background="@null"
+                android:textSize="20sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/open_table_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/opentable_btn_height"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="确定开台"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:background="@drawable/selector_bg_coffee"/>
+
+</RelativeLayout>

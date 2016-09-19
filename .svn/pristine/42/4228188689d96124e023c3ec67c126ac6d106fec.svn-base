@@ -1,0 +1,47 @@
+package com.chihuobao.kuaidian.base.bean;
+
+import java.util.List;
+
+public class HandOverBeanbean {
+
+	private String sbsj;
+
+	private List<HandOverBean> overBean;
+
+	public List<HandOverBean> getOverBean() {
+		return overBean;
+	}
+
+	public void setOverBean(List<HandOverBean> overBean) {
+		this.overBean = overBean;
+	}
+
+	public String getSbsj() {
+		return sbsj;
+	}
+
+	public void setSbsj(String sbsj) {
+		this.sbsj = sbsj;
+	}
+
+	public String getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(String totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getPreferentialTj() {
+		return preferentialTj;
+	}
+
+	public void setPreferentialTj(String preferentialTj) {
+		this.preferentialTj = preferentialTj;
+	}
+
+	private String totalPrice;
+
+	private String preferentialTj;
+
+}

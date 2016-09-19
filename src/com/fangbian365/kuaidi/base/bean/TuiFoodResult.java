@@ -1,0 +1,135 @@
+package com.fangbian365.kuaidi.base.bean;
+
+public class TuiFoodResult {
+
+	private String codeName;
+
+	private String units;
+
+	public String getUnits() {
+		return units;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
+	}
+
+	public String getCodeName() {
+		return codeName;
+	}
+
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	}
+
+	public String getCnt() {
+		return cnt;
+	}
+
+	public void setCnt(String cnt) {
+		this.cnt = cnt;
+	}
+
+	public String getTcycode() {
+		return tcycode;
+	}
+
+	public void setTcycode(String tcycode) {
+		this.tcycode = tcycode;
+	}
+
+	public String getBackcode() {
+		return backcode;
+	}
+
+	public void setBackcode(String backcode) {
+		this.backcode = backcode;
+	}
+
+	public String getTaiBh() {
+		return taiBh;
+	}
+
+	public void setTaiBh(String taiBh) {
+		this.taiBh = taiBh;
+	}
+
+	public String getTcyname() {
+		return tcyname;
+	}
+
+	public void setTcyname(String tcyname) {
+		this.tcyname = tcyname;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getTdsj() {
+		return tdsj;
+	}
+
+	public void setTdsj(String tdsj) {
+		this.tdsj = tdsj;
+	}
+
+	public String getTaiName() {
+		return taiName;
+	}
+
+	public void setTaiName(String taiName) {
+		this.taiName = taiName;
+	}
+
+	public String getTingName() {
+		return tingName;
+	}
+
+	public void setTingName(String tingName) {
+		this.tingName = tingName;
+	}
+
+	public String getBackname() {
+		return backname;
+	}
+
+	public void setBackname(String backname) {
+		this.backname = backname;
+	}
+
+	public String getTingBh() {
+		return tingBh;
+	}
+
+	public void setTingBh(String tingBh) {
+		this.tingBh = tingBh;
+	}
+
+	private String cnt;
+
+	private String tcycode;
+
+	private String backcode;
+
+	private String taiBh;
+
+	private String tcyname;
+
+	private String code;
+
+	private String tdsj;
+
+	private String taiName;
+
+	private String tingName;
+
+	private String backname;
+
+	private String tingBh;
+
+}

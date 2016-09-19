@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/layout_root_view"
+        android:layout_width="@dimen/dialog_width"
+        android:layout_height="@dimen/dialog_height_zengcai"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_sure_order" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp" >
+
+        <LinearLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_sure"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_yellow"
+                    android:gravity="center"
+                    android:text="确定"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_cancle"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_red"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/layout_bottom"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="改单"
+                android:textColor="@color/dialog_title"
+                android:textSize="23sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_table_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="6dp"
+                        android:text="04 桌位04"
+                        android:textColor="@color/dialog_text"
+                        android:textSize="17sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/iv_common_divider_line" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp" >
+
+                        <EditText
+                            android:id="@+id/et_person_num"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:digits="1234567890"
+                            android:gravity="center_horizontal|bottom"
+                            android:hint="就餐人数"
+                            android:inputType="number"
+                            android:imeOptions="actionNext"
+                            android:textColor="@color/dialog_text"
+                            android:textColorHint="@android:color/darker_gray"
+                            android:textSize="17sp"
+                            android:maxLength="2" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@drawable/iv_common_divider_line" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp" >
+
+                        <EditText
+                            android:id="@+id/et_waiter_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="center_horizontal|bottom"
+                            android:hint="服务员编号"
+                            android:textColor="@color/dialog_text"
+                            android:inputType="number"
+                            android:digits="1234567890"
+                            android:imeOptions="actionNext"
+                            android:textColorHint="@android:color/darker_gray"
+                            android:textSize="17sp"
+                            android:maxLength="4"
+                            />
+                    </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@drawable/iv_common_divider_line" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

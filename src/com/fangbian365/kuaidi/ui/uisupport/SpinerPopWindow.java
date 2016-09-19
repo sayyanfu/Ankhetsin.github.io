@@ -1,0 +1,108 @@
+package com.fangbian365.kuaidi.ui.uisupport;
+
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.base.bean.Canyin_Shop_Diningtable;
+import com.fangbian365.kuaidi.base.bean.Canyin_Shop_Floor;
+import com.fangbian365.kuaidi.base.bean.Canyin_Shop_Product_Type;
+import com.fangbian365.kuaidi.base.bean.PopBean;
+import com.fangbian365.kuaidi.constans.Constans;
+import com.fangbian365.kuaidi.ui.adapter.PopAdapter;
+import com.fangbian365.kuaidi.ui.adapter.ProTypeAdapter;
+import com.fangbian365.kuaidi.ui.adapter.SpHallAdapter;
+import com.fangbian365.kuaidi.ui.adapter.SpTableAdapter;
+
+public class SpinerPopWindow extends PopupWindow implements OnItemClickListener {
+	
+	
+	public static interface IOnItemSelectListener{
+		public void onItemClick(PopBean bean);
+	 };
+
+	private Context mContext;
+	private ListView mListView;
+	private IOnItemSelectListener mItemSelectListener;
+
+	public SpinerPopWindow(Context context) {
+		super(context);
+		mContext = context;
+		init();
+	}
+
+	public void setItemListener(IOnItemSelectListener listener) {
+		mItemSelectListener = listener;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> void setSpinnerAdatper(int type, List<T> data) {
+
+		switch (type) {
+		case Constans.SP_Pro_Type:
+			ProTypeAdapter pAdapter = new ProTypeAdapter(mContext);
+			pAdapter.setItems((List<Canyin_Shop_Product_Type>) data);
+			mListView.setAdapter(pAdapter);
+			break;
+		case Constans.SP_Shop_Floor:
+			SpHallAdapter hallAdapter = new SpHallAdapter(mContext);
+			hallAdapter.setItems((List<Canyin_Shop_Floor>) data);
+			mListView.setAdapter(hallAdapter);
+			break;
+		case Constans.SP_Shop_Diningtable:
+			SpTableAdapter tableAdapter = new SpTableAdapter(mContext);
+			tableAdapter.setItems((List<Canyin_Shop_Diningtable>) data);
+			mListView.setAdapter(tableAdapter);
+			break;
+		case Constans.SP_NORMAL:
+			PopAdapter adapter = new PopAdapter(mContext);
+			adapter.setItems((List<PopBean>) data);
+			if(data.size() >= 4) {
+				ViewGroup.LayoutParams params = mListView.getLayoutParams();
+				params.height = 240;
+				mListView.setLayoutParams(params);
+			}
+			
+			mListView.setAdapter(adapter);
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private void init() {
+		View view = LayoutInflater.from(mContext).inflate(R.layout.spiner_window_layout, null);
+		setContentView(view);
+		setWidth(LayoutParams.WRAP_CONTENT);
+		setHeight(LayoutParams.WRAP_CONTENT);
+
+		setFocusable(true);
+		ColorDrawable dw = new ColorDrawable(0xFFF5F6F7);
+		setBackgroundDrawable(dw);
+
+		mListView = (ListView) view.findViewById(R.id.listview);
+		
+		mListView.setOnItemClickListener(this);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		dismiss();
+		PopBean bean = (PopBean) parent.getItemAtPosition(position);
+		if (mItemSelectListener != null) {
+			mItemSelectListener.onItemClick(bean);
+		}
+	}
+}

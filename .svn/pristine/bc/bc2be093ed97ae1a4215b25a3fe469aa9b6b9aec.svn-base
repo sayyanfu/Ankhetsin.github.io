@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <RelativeLayout
+        android:id="@+id/layout_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_title_bar_height" >
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" >
+
+            <ImageView
+                android:id="@+id/iv_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="3dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_msg" />
+
+            <TextView
+                android:id="@+id/TV_msg"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="right"
+                android:background="@drawable/bg_cnt_msg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/main_linl01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="马家私房面"
+                android:textColor="@color/main_bg_shop_name"
+                android:textSize="@dimen/main_shop_name_size" />
+
+            <TextView
+                android:id="@+id/tv_waiter_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="(何明达)"
+                android:textColor="@color/main_tv_waiter_name"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_setting" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.05dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/iv_setting"
+            android:background="#c0c0c0" />
+    </RelativeLayout>
+
+    <!--
+    <RelativeLayout
+        android:id="@+id/layout_user_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_title_bar"
+        android:background="@drawable/bg_user_bar"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/layout_mag_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/msg_tag" />
+
+            <ImageView
+                android:id="@+id/iv_msg_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/msg_tag_slip"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_user_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/layout_mag_tag"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="5dp"
+            android:text="欢迎您,何明达登录本餐饮管理系统~"
+            android:textColor="@color/main_tv_user_bar"
+            android:textSize="12sp" />
+    </RelativeLayout>
+    -->
+
+    <RelativeLayout
+        android:id="@+id/layout_hall_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_title_bar_height"
+        android:layout_below="@id/layout_title_bar" >
+
+        <ImageView
+            android:id="@+id/iv_hall_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/iv_hall_left" />
+
+        <ImageView
+            android:id="@+id/iv_hall_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/iv_hall_right" />
+
+        <com.chihuobao.kuaidian.ui.uisupport.PickerView
+            android:id="@+id/picker_hall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/iv_hall_right"
+            android:layout_toRightOf="@id/iv_hall_left" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/iv_common_divider_line" />
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/rg_viewpager_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_viewpager_title_bar"
+        android:layout_below="@id/layout_hall_bar"
+        android:orientation="horizontal"
+        android:weightSum="3" >
+
+        <RadioButton
+            android:id="@+id/rb_all_table"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="全部"
+            android:textColor="@drawable/selector_tv_table_status"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rb_idle_table"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="空闲"
+            android:textColor="@drawable/selector_tv_table_status"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rb_inuse_table"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="占用"
+            android:textColor="@drawable/selector_tv_table_status"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <com.chihuobao.kuaidian.ui.uisupport.ScllorTabView
+        android:id="@+id/iv_off_tab_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/rg_viewpager_tab" />
+
+    <RelativeLayout
+        android:id="@+id/layout_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_title_bar_height"
+        android:layout_below="@id/iv_off_tab_line" >
+
+        <ImageView
+            android:id="@+id/iv_search_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/search_tag" />
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/main_et_search_bar_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/iv_search_tag"
+            android:background="@drawable/et_bg_main_search"
+            android:digits="0123456789"
+            android:gravity="center_vertical"
+            android:hint="搜索桌位"
+            android:inputType="number"
+            android:paddingLeft="10dp"
+            android:textColor="@color/main_bg_shop_name"
+            android:textColorLink="@color/et_main_search_hint"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/table_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_search_bar"
+        android:layout_marginTop="3dp" >
+    </android.support.v4.view.ViewPager>
+
+    <RelativeLayout
+        android:id="@+id/main_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/pop_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/pop_table_op"
+        layout="@layout/table_op_layer"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/loading"
+        android:visibility="gone" />
+
+</RelativeLayout>

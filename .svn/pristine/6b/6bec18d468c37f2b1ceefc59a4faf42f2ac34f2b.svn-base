@@ -1,0 +1,25 @@
+
+package com.chihuobao.kuaidian.ui.receiver;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
+/**
+ * The fragment receiver interface. It's called from the some concrete concrete
+ * {@link BroadcastReceiver}. It's not <b>IPC</b>, and receive results they
+ * supply with {@link #send}
+ */
+public interface IReceiver {
+
+    /**
+     * This method is called when the BroadcastReceiver is receiving an Intent
+     * broadcast. During this time you can use the other methods on
+     * BroadcastReceiver to view/modify the current result values. This method
+     * is always called within the main thread of its process.
+     * 
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
+    public void onReceive(Context context, Intent intent);
+}

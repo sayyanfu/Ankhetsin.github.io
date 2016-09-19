@@ -1,0 +1,75 @@
+package com.fangbian365.kuaidi.ui.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.base.bean.HaveProductBean;
+import com.fangbian365.kuaidi.ui.adapter.HaveProductAdapter.ViewHolder;
+import com.fangbian365.kuaidi.ui.adapter.base.BaseSingleTypeAdapter;
+
+public class BillProductAdapter extends BaseSingleTypeAdapter<HaveProductBean>{
+
+	public BillProductAdapter(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup paramViewGroup) {
+		// TODO Auto-generated method stub
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = View.inflate(mContext, R.layout.fragment_bill_lv_item, null);
+			viewHolder = new ViewHolder();
+
+			viewHolder.tv_proName = (TextView) convertView.findViewById(R.id.tv_bill_item_proName);
+			viewHolder.tv_price = (TextView) convertView.findViewById(R.id.tv_bill_item_price);
+			viewHolder.iv_zeng = (ImageView) convertView.findViewById(R.id.iv_bill_item_z);
+			viewHolder.tv_count = (TextView) convertView.findViewById(R.id.tv_bill_item_cnt);
+			convertView.setTag(viewHolder);
+
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		
+		HaveProductBean item = getItem(position);//获取一条数据
+		if (item != null) {
+			viewHolder.tv_proName.setText(item.getCodeName());
+			viewHolder.tv_price.setText(item.getPrice() + "/" + item.getUnits());
+			viewHolder.tv_count.setText(item.getCnt()+"");
+			
+			if (item.getStatus() == 2) {
+				viewHolder.iv_zeng.setVisibility(View.VISIBLE);
+				viewHolder.iv_zeng.setBackgroundResource(R.drawable.bg_zeng);
+			} else if(item.getStatus() == 3){
+				viewHolder.iv_zeng.setVisibility(View.VISIBLE);
+				viewHolder.iv_zeng.setBackgroundResource(R.drawable.tui_bg);
+			}
+			else {
+				viewHolder.iv_zeng.setVisibility(View.INVISIBLE);
+			}
+		}
+		return convertView;
+	}
+	@Override
+	public HaveProductBean getItem(int position) {
+		if (mItems == null)
+			return null;
+		int p = position % mItems.size();
+		return super.getItem(p);
+	}
+	
+	/**
+	 * ViewHolder 控件初始化
+	 */
+	public static class ViewHolder {
+		public TextView tv_proName;;
+		public TextView tv_price;
+		public ImageView iv_zeng;
+		public TextView tv_count;
+	}
+}

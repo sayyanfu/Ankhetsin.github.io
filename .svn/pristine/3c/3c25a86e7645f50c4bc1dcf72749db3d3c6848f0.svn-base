@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <!--
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <include layout="@layout/sliding_layout" />
+    </LinearLayout>
+    -->
+
+    <include
+        android:id="@+id/add_in"
+        layout="@layout/layout_title_bar" />
+
+    <include
+        android:id="@+id/category_linear"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/add_in"
+        layout="@layout/layout_category" />
+
+    <LinearLayout
+        android:id="@+id/add_linl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/add_in"
+        android:layout_toRightOf="@id/category_linear"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/product_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1dp"
+            android:listSelector="@android:color/transparent"
+             >
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout>

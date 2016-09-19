@@ -1,0 +1,19 @@
+package com.chihuobao.kuaidian.mod.asynctask.http;
+
+import com.chihuobao.kuaidian.base.volley.Response.ErrorListener;
+import com.chihuobao.kuaidian.base.volley.Response.Listener;
+import com.chihuobao.kuaidian.base.volley.toolbox.StringRequest;
+
+public class StringTask extends StringRequest {
+
+	public StringTask(int method, String url, Listener<String> listener,
+			ErrorListener errorListener) {
+		super(method, url, listener, errorListener);
+	}
+	
+	public StringTask(String url, Listener<String> listener, ErrorListener errorListener) {
+		super(url, listener, errorListener);
+    }
+	
+	
+}

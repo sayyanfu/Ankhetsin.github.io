@@ -1,0 +1,57 @@
+package com.chihuobao.kuaidian.base.bean;
+
+import java.io.Serializable;
+
+public class ReminderProducts implements Serializable {
+
+	private static final long serialVersionUID = -1896337261501546615L;
+	private String code;
+
+	private String cnt;
+
+	private String taste;
+
+	private String productName;
+
+	private String units;
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCnt(String cnt) {
+		this.cnt = cnt;
+	}
+
+	public String getCnt() {
+		return this.cnt;
+	}
+
+	public void setTaste(String taste) {
+		this.taste = taste;
+	}
+
+	public String getTaste() {
+		return this.taste;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductName() {
+		return this.productName;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
+	}
+
+	public String getUnits() {
+		return this.units;
+	}
+}

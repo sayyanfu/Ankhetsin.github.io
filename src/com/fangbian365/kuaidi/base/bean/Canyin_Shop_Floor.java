@@ -1,0 +1,111 @@
+/**
+ * 楼层
+ */
+
+package com.fangbian365.kuaidi.base.bean;
+
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
+
+@Table(name = "canyin_shop_floor")
+public class Canyin_Shop_Floor  extends PopBean{
+	public Canyin_Shop_Floor() {
+		super("");
+	}
+
+	@Column(name = "floorId")
+	private String floorId;
+	@Column(name = "floorcode")
+	private String floorcode;
+	@Column(name = "floorName")
+	private String floorName;
+	@Column(name = "mlType")
+	private Integer mlType;
+	@Column(name = "autoMl")
+	private Integer autoMl;
+	@Column(name = "remark")
+	private String remark;
+	@Column(name = "printId")
+	private String printId;
+	private boolean isChecked = false;
+	// floorId
+	public void setFloorid(String floorid) {
+		this.floorId = floorid;
+	}
+
+	public String getFloorid() {
+		return floorId;
+	}
+
+	// floorcode
+	public void setFloorcode(String floorcode) {
+		this.floorcode = floorcode;
+	}
+
+	public String getFloorcode() {
+		return floorcode;
+	}
+
+	// floorName
+	public void setFloorname(String floorname) {
+		this.floorName = floorname;
+	}
+
+	public String getFloorname() {
+		return floorName;
+	}
+
+	// mlType
+	public void setMltype(Integer mltype) {
+		this.mlType = mltype;
+	}
+
+	public Integer getMltype() {
+		return mlType;
+	}
+
+	// autoMl
+	public void setAutoml(Integer automl) {
+		this.autoMl = automl;
+	}
+
+	public Integer getAutoml() {
+		return autoMl;
+	}
+
+	// remark
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	// printId
+	public void setPrintid(String printid) {
+		this.printId = printid;
+	}
+
+	public String getPrintid() {
+		return printId;
+	}
+	public boolean isChecked() {
+		return isChecked;
+	}
+
+	public void setChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
+
+	@Override
+	public String toString() {
+		return "Canyin_Shop_Floor [floorId=" + floorId + ", floorcode="
+				+ floorcode + ", floorName=" + floorName + ", mlType=" + mlType
+				+ ", autoMl=" + autoMl + ", remark=" + remark + ", printId="
+				+ printId + ", isChecked=" + isChecked + "]";
+	}
+	
+	
+
+}

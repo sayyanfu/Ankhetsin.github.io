@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/pop_root"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:background="@color/bg_pop_layer"
+        android:weightSum="4" >
+
+        <ImageView
+            android:id="@+id/iv_kaitai"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/selector_bg_table_kt" />
+
+        <ImageView
+            android:id="@+id/iv_qingtai"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/selector_bg_table_qt"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_diandan"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/selector_bg_table_dd" />
+
+        <ImageView
+            android:id="@+id/iv_huantai"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/selector_bg_table_ht" />
+
+        <ImageView
+            android:id="@+id/iv_jiezhang"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/selector_bg_table_msg" />
+    </LinearLayout>
+
+</FrameLayout>

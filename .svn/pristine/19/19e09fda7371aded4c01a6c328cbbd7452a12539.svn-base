@@ -1,0 +1,101 @@
+package com.chihuobao.kuaidian.ui.fragment;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+
+import com.chihuobao.kuaidian.R;
+import com.chihuobao.kuaidian.base.utils.SysWorkTools;
+import com.chihuobao.kuaidian.constans.Constans;
+import com.chihuobao.kuaidian.ui.receiver.HomeBroadcastReceiver;
+import com.umeng.analytics.MobclickAgent;
+
+public class InputProNumDialogFragment extends DialogFragment implements OnClickListener {
+
+	private static final String TAG = "InputProNumDialogFragment";
+
+	private EditText mEtCnt;
+	private int mPostiont = 0;
+	private float mCnt = 0.0f;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			mPostiont = bundle.getInt(Constans.KEY_PRO_POSITION);
+			mCnt = bundle.getFloat(Constans.KEY_PRO_CNT);
+		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(TAG);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(TAG);
+	}
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		View view = inflater.inflate(R.layout.product_input_cnt_dialog, null, false);
+		view.findViewById(R.id.tv_sure).setOnClickListener(this);
+		view.findViewById(R.id.tv_cancle).setOnClickListener(this);
+		mEtCnt = (EditText) view.findViewById(R.id.et_cnt);
+		String strCnt = String.valueOf(mCnt);
+		mEtCnt.setText(strCnt);
+		mEtCnt.setSelection(strCnt.length());
+		
+		dialog.setContentView(view);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setCancelable(true);
+
+		return dialog;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.tv_sure:
+			String sCnt = mEtCnt.getText().toString().trim();
+			try {
+				float fCnt = Float.parseFloat(sCnt);
+				if (fCnt <= 0.00f) {
+					SysWorkTools.showToast(getActivity(), "菜品数量不正确");
+					return;
+				}
+				HomeBroadcastReceiver.onDataTransfer(Constans.TYPE_INPUT_PRO_CNT, fCnt, mPostiont);
+					
+				dismiss();
+			} catch (Exception e) {
+				e.printStackTrace();
+				SysWorkTools.showToast(getActivity(), "数量输入有误，请重新输入");
+			}
+			
+			
+			break;
+		case R.id.tv_cancle:
+			dismiss();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
+	
+	
+
+}

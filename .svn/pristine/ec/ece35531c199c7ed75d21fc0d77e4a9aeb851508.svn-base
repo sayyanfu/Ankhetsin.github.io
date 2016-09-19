@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#ff000000</color>
+    <color name="red">#ffff0000</color>
+    <color name="bind_shop_bottom_title_color">#894D29</color>
+    <color name="common_header">#FFFEFFFF</color>
+    <color name="common_header_title">#ff353637</color>
+    <color name="setting_popup_devide">#8a8a8a</color>
+    <color name="offline_dialog_text">#FF595757</color>
+    <color name="no_sdcard_color">#ff9b9b9b</color>
+    <color name="main_bg">#ffFEFFFF</color>
+    <color name="main_bg_shop_name">#ff262527</color>
+    <color name="main_tv_user_bar">#ff606162</color>
+    <color name="main_tv_waiter_name">#ff414243</color>
+    <color name="et_main_search_hint">#ffABACAD</color>
+    <color name="dialog_title">#ff262527</color>
+    <color name="bg_pop_layer">#ff262627</color>
+    <color name="table_disable">#ff39393A</color>
+    <color name="dialog_text">#ff2E2E2F</color>
+    <color name="line_gray">#fff4f4f5</color>
+    <color name="spinner_item_background">#ebd3a5</color>
+    <color name="remarks_sure_text">#fffca901</color>
+    <color name="black_01">#ff2C2D2E</color>
+    <color name="black_02">#ff000102</color>
+    <color name="black_03">#ff424445</color>
+    <color name="black_04">#ff6A6B6C</color>
+    <color name="red_01">#ffF80007</color>
+    <color name="black_pop_item_text">#ff808182</color>
+    <color name="pop_divider_line">#ffDFE0E1</color>
+    <color name="list_view_divider_line">#ffC9CACB</color>
+    
+    <color name="category_color">#262627</color>
+    <color name="category_line_color">#444546</color>
+    <color name="category_pass_color">#FD9809</color>
+    
+    <color name="bg_loading">#60000000</color>
+    <color name="bg_loading_dialog">#00000000</color>
+
+</resources>

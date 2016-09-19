@@ -1,0 +1,133 @@
+package com.chihuobao.kuaidian.ui.fragment;
+
+import com.chihuobao.kuaidian.R;
+import com.chihuobao.kuaidian.base.bean.DeviceNum;
+import com.chihuobao.kuaidian.base.log.FrameLog;
+import com.chihuobao.kuaidian.base.utils.PrefsConfig;
+import com.chihuobao.kuaidian.base.utils.SysWorkTools;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class SettingFragment extends HeaderFragment{
+
+	private TextView tv_bind, tv_mpos;
+	private EditText et_no;
+	private LinearLayout linl_tc;
+	
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		ViewGroup contentView = (ViewGroup) inflater.inflate(R.layout.fragment_setting, null);
+		contentView.findViewById(R.id.setting_bind).setOnClickListener(this);
+		contentView.findViewById(R.id.setting_mpos).setOnClickListener(this);
+		if (null == PrefsConfig.devNum || PrefsConfig.devNum.equals("")) {
+			DeviceNum num = new DeviceNum();
+			num.setDevNum("0001");
+			PrefsConfig.saveDevNum(num);
+		}
+		et_no = (EditText) contentView.findViewById(R.id.et_setting_no);
+		et_no.addTextChangedListener(mTextWatcher);
+		et_no.setHint(PrefsConfig.devNum);
+		
+		linl_tc = (LinearLayout) contentView.findViewById(R.id.ll_setting_tc);
+		linl_tc.setOnClickListener(this);
+		
+		return super.onCreateView(inflater, contentView, savedInstanceState);
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		DialogFragment dialog;
+		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.setting_bind:
+			
+			break;
+		case R.id.setting_mpos:
+			break;
+		case R.id.et_setting_no:
+			break;
+		case R.id.ll_setting_tc:
+			dialog = new ExitAccountFragment();
+			FragmentManager fragmentManager = getChildFragmentManager();
+			dialog.show(fragmentManager, "ExitAccountFragment");
+			break;
+		default:
+			break;
+		}
+	}
+	
+	TextWatcher mTextWatcher = new TextWatcher() {
+		CharSequence temp;
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			// TODO Auto-generated method stub
+			temp = s;
+			
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			// TODO Auto-generated method stub
+			FrameLog.e("SettingFragment", temp.length() + "");
+			if (temp.length() == 4) {
+				DeviceNum num = new DeviceNum();
+				num.setDevNum(s.toString().trim());
+				PrefsConfig.saveDevNum(num);
+				SysWorkTools.closeKeyboard(et_no);
+				SysWorkTools.showToast(getActivity(), "修改设备编号成功");
+			}
+		}
+	};
+	
+	@Override
+	protected String getTitle() {
+		// TODO Auto-generated method stub
+		return "设置";
+	}
+
+	@Override
+	protected int getMenuResId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

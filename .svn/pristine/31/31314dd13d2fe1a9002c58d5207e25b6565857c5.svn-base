@@ -1,0 +1,51 @@
+package com.chihuobao.kuaidian.ui.adapter.base;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+public abstract class BaseSingleTypeAdapter<T> extends BaseAdapter {
+	protected Context mContext;
+	protected List<T> mItems;
+	protected OnClickListener mClickListener;
+	protected boolean footerViewEnable = false;
+
+	public BaseSingleTypeAdapter(Context context) {
+		this.mContext = context;
+	}
+
+	public void setItems(List<T> items) {
+		this.mItems = items;
+	}
+	public List<T> getItems() {
+		return mItems;
+	}
+
+	public int getCount() {
+		if (this.mItems == null)
+			return 0;
+		return this.mItems.size();
+	}
+
+	public T getItem(int position) {
+		if (this.mItems == null)
+			return null;
+		return this.mItems.get(position);
+	}
+
+	public long getItemId(int position) {
+		return position;
+	}
+	
+	public boolean getSwipEnableByPosition(int position){
+        return true;
+    }
+
+	public abstract View getView(int paramInt, View paramView,
+			ViewGroup paramViewGroup);
+	
+}

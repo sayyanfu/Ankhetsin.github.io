@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/layout_close_table"
+        android:layout_width="@dimen/dialog_width"
+        android:layout_height="@dimen/dialog_height"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_sure_order" >
+
+        <LinearLayout
+            android:id="@+id/exit_app_bottomlayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_exit_app_ok"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_yellow"
+                    android:gravity="center"
+                    android:text="确 定"
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_exit_app_calcel"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_red"
+                    android:gravity="center"
+                    android:text="取 消"
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_exit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/exit_app_bottomlayout"
+            android:layout_centerInParent="true" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="确定要退出吗？"
+                android:textColor="@color/dialog_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

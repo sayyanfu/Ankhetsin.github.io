@@ -1,0 +1,378 @@
+package com.chihuobao.kuaidian.ui.fragment;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.xutils.db.sqlite.WhereBuilder;
+import org.xutils.ex.DbException;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.chihuobao.kuaidian.R;
+import com.chihuobao.kuaidian.base.CHBApp;
+import com.chihuobao.kuaidian.base.bean.Canyin_Shop_Diningtable;
+import com.chihuobao.kuaidian.base.bean.Canyin_Shop_Product;
+import com.chihuobao.kuaidian.base.bean.Canyin_Shop_Product_Type;
+import com.chihuobao.kuaidian.base.bean.HaveProductBean;
+import com.chihuobao.kuaidian.base.log.FrameLog;
+import com.chihuobao.kuaidian.constans.Constans;
+import com.chihuobao.kuaidian.ui.activity.MainActivity;
+import com.chihuobao.kuaidian.ui.adapter.CategoryAdapter;
+import com.chihuobao.kuaidian.ui.adapter.MenuProductAdapter;
+import com.chihuobao.kuaidian.ui.receiver.HomeBroadcastReceiver;
+import com.chihuobao.kuaidian.ui.receiver.IDataTransfer;
+import com.chihuobao.kuaidian.ui.uisupport.ProductList;
+import com.umeng.analytics.MobclickAgent;
+/**
+ * 加菜
+ * @author houjianjiang
+ *
+ */
+public class AddProductFragment extends Fragment implements IDataTransfer {
+
+	private final String TAG = AddProductFragment.class.getSimpleName();
+	private ListView productListView;// 菜品List
+	private ListView categoryList;// 分类List
+	private ImageView leftBack;
+	private ImageView rightImg;
+	private TextView titleTxt;
+
+	private List<Canyin_Shop_Product_Type> typeList = null;
+
+	private MenuProductAdapter productAdapter;
+
+	private Canyin_Shop_Diningtable table;
+
+	private CategoryAdapter categoryAdapter;
+
+	private ViewGroup categoryGroup;
+
+	private int popLayerWidth;
+
+	//private ImageView hideCategoryImg;
+
+	private List<HaveProductBean> mList = new ArrayList<HaveProductBean>();
+
+	private ProductList<HaveProductBean> addList = new ProductList<HaveProductBean>();
+
+	private GestureDetector mGestureDetector;
+
+	private MainActivity.MyOnTouchListener myOnTouchListener;
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			table = (Canyin_Shop_Diningtable) bundle
+					.getSerializable(Constans.KEY_TABLE_INFO);
+		}
+		HomeBroadcastReceiver.registerIDataTransfer(this);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		ViewGroup view = (ViewGroup) inflater.inflate(
+				R.layout.layout_addproduct, null);
+
+		categoryGroup = (ViewGroup) view.findViewById(R.id.category_linear);
+		popLayerWidth = categoryGroup.findViewById(R.id.category_linear)
+				.getLayoutParams().width;
+
+//		hideCategoryImg = (ImageView) categoryGroup
+//				.findViewById(R.id.category_img);
+//		hideCategoryImg.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				showOrHideCategoryView();
+//			}
+//		});
+
+		productListView = (ListView) view.findViewById(R.id.product_list);
+		categoryList = (ListView) view.findViewById(R.id.category_list);
+
+		titleTxt = (TextView) view.findViewById(R.id.title_bar_name);
+		rightImg = (ImageView) view.findViewById(R.id.title_bar_menu_btn);
+		rightImg.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				showOrHideCategoryView();
+			}
+		});
+		leftBack = (ImageView) view.findViewById(R.id.left_back);
+		leftBack.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				onKeyDown(KeyEvent.KEYCODE_BACK);
+			}
+		});
+
+		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		MobclickAgent.onPageStart(TAG);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(TAG);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		getProductCategory();
+		productAdapter = new MenuProductAdapter(getActivity());
+		for (Canyin_Shop_Product product : obtainDishClass(0)) {
+			HaveProductBean proBean = new HaveProductBean(product, table);
+			proBean.setCnt(0.0f);
+			mList.add(proBean);
+		}
+		productAdapter.setItems(mList);
+		productListView.setAdapter(productAdapter);
+
+		categoryAdapter = new CategoryAdapter(getActivity());
+		categoryAdapter.setItems(typeList);
+		categoryList.setAdapter(categoryAdapter);
+		categoryList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
+
+				for (int i = 0; i < typeList.size(); i++) {
+					if (i == position) {
+						typeList.get(i).setClick(true);
+					}else {
+						typeList.get(i).setClick(false);
+					}
+				}
+				categoryAdapter.notifyDataSetChanged();
+				
+				List<Canyin_Shop_Product> productList = obtainDishClass(position);
+				mList.clear();
+				for (Canyin_Shop_Product products : productList) {
+					HaveProductBean proBean = new HaveProductBean(products, table);
+					proBean.setCnt(0.0f);
+					mList.add(proBean);
+				}
+
+				for (HaveProductBean item : mList) {
+					if (addList.contains(item)) {
+						for (HaveProductBean addItem : addList) {
+							if (addItem.getCode().equals(item.getCode())) {
+								item.setCnt(addItem.getCnt());
+								break;
+							}
+						}
+					}
+				}
+
+				productAdapter.setItems(mList);
+				productAdapter.notifyDataSetChanged();
+				productListView.setSelection(0);
+				//hidePopupMenu();
+			}
+		});
+
+		// mGestureDetector = new GestureDetector(getActivity(),
+		// new SideIndexGestureListener());
+
+		// myOnTouchListener = new MainActivity.MyOnTouchListener() {
+		//
+		// @Override
+		// public boolean onTouch(MotionEvent ev) {
+		// //boolean result = mGestureDetector.onTouchEvent(ev);
+		// return result;
+		// }
+		// };
+		// ((MainActivity) getActivity())
+		// .registerMyOnTouchListener(myOnTouchListener);
+
+	}
+
+	class SideIndexGestureListener extends
+			GestureDetector.SimpleOnGestureListener {
+
+		final int verticalMinistance = 123;
+		final int minVelocity = 123;
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			// Toast.makeText(getActivity(), "onDown",
+			// Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+
+			// 大于设定的最小滑动距离并且在水平/竖直方向速度绝对值大于设定的最小速度，则执行相应方法
+			if (e1.getX() - e2.getX() > verticalMinistance
+					&& Math.abs(velocityX) > minVelocity) {
+
+				if (categoryGroup.getVisibility() == View.GONE) {
+					showPopupMenu();
+				}
+
+			} else if (e2.getX() - e1.getX() > verticalMinistance
+					&& Math.abs(velocityX) > minVelocity) {
+				if (categoryGroup.getVisibility() == View.VISIBLE) {
+					hidePopupMenu();
+				}
+			}
+
+			return false;
+		}
+
+	}
+
+	/**
+	 * 显示或隐藏分类界面
+	 */
+	private void showOrHideCategoryView() {
+		if (categoryGroup.getVisibility() == View.GONE) {
+			hidePopupMenu();
+		} else {
+			showPopupMenu();
+		}
+	}
+
+	/**
+	 * 获取所有分类信息
+	 */
+	private void getProductCategory() {
+
+		try {
+			typeList = CHBApp.getInstance().getDbManager()
+					.selector(Canyin_Shop_Product_Type.class)
+					.where("parentId", "!=", "0").findAll();
+			if(typeList != null && typeList.size() > 0) {
+				typeList.get(0).setClick(true);
+			}
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 按分类查找菜品
+	 */
+	private List<Canyin_Shop_Product> obtainDishClass(int position) {
+		List<Canyin_Shop_Product> pinyinList = null;
+		String columnName = "status";
+		try {
+			FrameLog.i(TAG, (new Date(System.currentTimeMillis())).toString());
+			pinyinList = CHBApp
+					.getInstance()
+					.getDbManager()
+					.selector(Canyin_Shop_Product.class)
+					.where("typeId", "=", typeList.get(position).getTypeid())
+					.and(WhereBuilder.b(columnName, "=", 0)).findAll();
+			//.or(columnName, "=", 1)
+			
+			FrameLog.i(TAG, (new Date(System.currentTimeMillis())).toString());
+			if (pinyinList != null) {
+				titleTxt.setText(typeList.get(position).getTypename());
+			}
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
+		return pinyinList;
+	}
+
+	private void showPopupMenu() {
+		categoryGroup.setVisibility(View.GONE);
+		TranslateAnimation animation = new TranslateAnimation(popLayerWidth, 0,
+				0, 0);
+		animation.setDuration(400);
+		categoryGroup.startAnimation(animation);
+
+		// mBg.setVisibility(View.VISIBLE);
+		// AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1.0f);
+		// alphaAnimation.setDuration(200);
+		// mBg.startAnimation(alphaAnimation);
+	}
+
+	private void hidePopupMenu() {
+
+		TranslateAnimation animation = new TranslateAnimation(0, popLayerWidth,
+				0, 0);
+		animation.setDuration(400);
+		animation.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation arg0) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation arg0) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animation arg0) {
+				categoryGroup.setVisibility(View.VISIBLE);
+				// mBg.setVisibility(View.GONE);
+			}
+		});
+
+		categoryGroup.startAnimation(animation);
+	}
+
+	public boolean onKeyDown(int keyCode) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			
+			FragmentManager fragmentManager = getActivity()
+					.getSupportFragmentManager();
+			fragmentManager.popBackStack();
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void onDataTransfer(int type, Object... data) {
+		if (type == Constans.TYPE_MENU_PRO_ADD_SUB) {
+			HaveProductBean bean = (HaveProductBean) data[0];
+			addList.add(bean, 0);
+		}
+
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		HomeBroadcastReceiver.onDataTransfer(Constans.TYPE_ADD_PRO_LIST,addList);
+		HomeBroadcastReceiver.unregisterIDataTransfer(this);
+	}
+
+}

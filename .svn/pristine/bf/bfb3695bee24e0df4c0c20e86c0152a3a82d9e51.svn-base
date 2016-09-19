@@ -1,0 +1,7 @@
+package com.chihuobao.kuaidian.ui.receiver;
+
+public interface IDataTransfer {
+
+	public abstract void onDataTransfer(int type, Object... data);
+	
+}

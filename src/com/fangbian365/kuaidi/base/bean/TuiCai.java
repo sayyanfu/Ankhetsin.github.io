@@ -1,0 +1,55 @@
+package com.fangbian365.kuaidi.base.bean;
+/**
+ *退菜接口对象
+ */
+public class TuiCai {
+	private String id;
+	private String cnt;
+	private String tccnt;
+	private String backcode;
+	private String backname;
+	private String tcycode;
+	private String tcyname;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getCnt() {
+		return cnt;
+	}
+	public void setCnt(String cnt) {
+		this.cnt = cnt;
+	}
+	public String getTccnt() {
+		return tccnt;
+	}
+	public void setTccnt(String tccnt) {
+		this.tccnt = tccnt;
+	}
+	public String getBackcode() {
+		return backcode;
+	}
+	public void setBackcode(String backcode) {
+		this.backcode = backcode;
+	}
+	public String getBackname() {
+		return backname;
+	}
+	public void setBackname(String backname) {
+		this.backname = backname;
+	}
+	public String getTcycode() {
+		return tcycode;
+	}
+	public void setTcycode(String tcycode) {
+		this.tcycode = tcycode;
+	}
+	public String getTcyname() {
+		return tcyname;
+	}
+	public void setTcyname(String tcyname) {
+		this.tcyname = tcyname;
+	}
+}

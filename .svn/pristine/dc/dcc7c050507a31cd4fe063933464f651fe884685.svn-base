@@ -1,0 +1,9 @@
+package com.chihuobao.kuaidian.mod.inter;
+
+import com.chihuobao.kuaidian.base.bean.Canyin_Shop_Product_Type;
+
+public interface CategoryClickLisener {
+
+	void clickCategory(Canyin_Shop_Product_Type category);
+
+}

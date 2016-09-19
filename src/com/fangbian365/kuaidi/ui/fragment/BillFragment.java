@@ -1,0 +1,313 @@
+package com.fangbian365.kuaidi.ui.fragment;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Random;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.cardinfolink.cashiersdk.listener.CashierListener;
+import com.cardinfolink.cashiersdk.model.InitData;
+import com.cardinfolink.cashiersdk.model.OrderData;
+import com.cardinfolink.cashiersdk.model.ResultData;
+import com.cardinfolink.cashiersdk.sdk.CashierSdk;
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.base.bean.Canyin_Shop_Diningtable;
+import com.fangbian365.kuaidi.base.bean.HaveProductBean;
+import com.fangbian365.kuaidi.base.log.FrameLog;
+import com.fangbian365.kuaidi.base.utils.PrefsConfig;
+import com.fangbian365.kuaidi.base.utils.PrefsUtils;
+import com.fangbian365.kuaidi.base.utils.SysWorkTools;
+import com.fangbian365.kuaidi.constans.Constans;
+import com.fangbian365.kuaidi.mod.asynctask.http.FetchListener;
+import com.fangbian365.kuaidi.mod.manager.DataFetchManager;
+import com.fangbian365.kuaidi.ui.activity.MainActivity;
+import com.fangbian365.kuaidi.ui.adapter.BillProductAdapter;
+import com.fangbian365.kuaidi.ui.receiver.HomeBroadcastReceiver;
+import com.fangbian365.kuaidi.ui.receiver.IDataTransfer;
+import com.umeng.analytics.MobclickAgent;
+
+public class BillFragment extends HeaderFragment implements IDataTransfer {
+	private String tag = "BillFragment";
+	private Canyin_Shop_Diningtable mTable;
+
+	private TextView tabName_tv, time_tv, operName_tv, lsh_tv, yj_tv, ml_tv,
+			zsje_tv, ysje_tv;
+	private List<HaveProductBean> mHaveDishList;// 已点菜品
+	private BillProductAdapter bProAdapter;
+	private ListView proLv;
+	private ImageView iv_mpos, iv_wx, iv_zfb;
+	private String danNo;
+	private String ysje;
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart(tag);
+
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd(tag);
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			mTable = (Canyin_Shop_Diningtable) bundle
+					.getSerializable(Constans.KEY_BILL);
+		}
+		FrameLog.e(tag, mTable.toString());
+
+		InitData initData = new InitData();// 初始化 支付SDK
+		initData.mchntid = "016100048160001";
+		initData.inscd = "10161910";
+		initData.terminalid = "00001229";
+		initData.isProduce = true;
+		initData.signKey = "4bb31f6d71c044b9c0d724b5da075908";
+		CashierSdk.init(initData);
+
+		HomeBroadcastReceiver.registerIDataTransfer(this);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		ViewGroup contentView = (ViewGroup) inflater.inflate(
+				R.layout.fragment_bill, null);
+		initVeiw(contentView);
+		doFetchProduceAll();
+		return super.onCreateView(inflater, contentView, savedInstanceState);
+	}
+
+	private void initVeiw(ViewGroup contentView) {
+		// TODO Auto-generated method stub
+		tabName_tv = (TextView) contentView.findViewById(R.id.tv_bill_tabName);
+		time_tv = (TextView) contentView.findViewById(R.id.tv_bill_time);
+		operName_tv = (TextView) contentView
+				.findViewById(R.id.tv_bill_operName);
+		lsh_tv = (TextView) contentView.findViewById(R.id.tv_bill_lsh);
+		ml_tv = (TextView) contentView.findViewById(R.id.tv_bill_ml);
+		zsje_tv = (TextView) contentView.findViewById(R.id.tv_bill_zsje);
+		ysje_tv = (TextView) contentView.findViewById(R.id.tv_bill_ysje);
+		yj_tv = (TextView) contentView.findViewById(R.id.tv_bill_yuanjia);
+		iv_mpos = (ImageView) contentView.findViewById(R.id.iv_mpos_zf);
+		iv_wx = (ImageView) contentView.findViewById(R.id.iv_wx_zf);
+		iv_zfb = (ImageView) contentView.findViewById(R.id.iv_zfb_zf);
+		iv_mpos.setOnClickListener(this);
+		iv_zfb.setOnClickListener(this);
+		iv_wx.setOnClickListener(this);
+		proLv = (ListView) contentView.findViewById(R.id.lv_bill_product);
+		bProAdapter = new BillProductAdapter(getActivity());
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+
+		tabName_tv.setText("台位名称：" + mTable.getDtablename());
+		;
+		time_tv.setText("开台时间："
+				+ Constans.DATE_FORMAT.format(mTable.getStarttime()));
+		operName_tv.setText("服务员：" + PrefsConfig.workerName);
+		lsh_tv.setText("流水号：" + mTable.getLsh());
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		super.onClick(v);
+		Bundle bundle;
+		switch (v.getId()) {
+		case R.id.iv_mpos_zf:
+
+			break;
+		case R.id.iv_wx_zf:
+			String ysje02 = PrefsUtils.loadPrefString(getActivity(), mTable.getLsh() + "w");
+			if (null == PrefsUtils.loadPrefString(getActivity(), mTable.getLsh() + "d")
+					|| (null != ysje02 && !ysje02.equals(ysje))) {
+				danNo = System.currentTimeMillis() + randomNum() + "";
+			}else {
+				danNo = PrefsUtils.loadPrefString(getActivity(), mTable.getLsh() + "d");
+			}
+			
+			WXerweimaFragment wxf = new WXerweimaFragment();
+			FrameLog.e(tag, "wx-----------" + danNo);
+			Bundle bundle1 = new Bundle();
+			bundle1.putString("danNo", danNo);
+			bundle1.putString("money", ysje);
+			bundle1.putString("lsh", mTable.getLsh());
+			bundle1.putSerializable("list", (Serializable) mHaveDishList);
+			bundle1.putString("ml", mling);
+			wxf.setArguments(bundle1);
+			((MainActivity) getActivity()).entrySubFragment(wxf);
+			break;
+		case R.id.iv_zfb_zf:
+			if (null == PrefsUtils.loadPrefString(getActivity(), mTable.getLsh() + "dz")) {
+				danNo = System.currentTimeMillis() + randomNum() + "";
+			}else {
+				danNo = PrefsUtils.loadPrefString(getActivity(), mTable.getLsh() + "dz");
+			}
+			ZFBerweimaFragment zfbf = new ZFBerweimaFragment();
+			FrameLog.e(tag, "zfb-----------");
+			Bundle bundle2 = new Bundle();
+			bundle2.putString("danNo", danNo);
+			bundle2.putString("money", ysje);
+			bundle2.putString("lsh", mTable.getLsh());
+			bundle2.putSerializable("list", (Serializable) mHaveDishList);
+			bundle2.putString("ml", mling);
+			zfbf.setArguments(bundle2);
+			((MainActivity) getActivity()).entrySubFragment(zfbf);
+
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	String mling;
+
+	private void reFreshUI(List<HaveProductBean> mHaveDishList) {
+		// TODO Auto-generated method stub
+		bProAdapter.setItems(mHaveDishList);
+		proLv.setAdapter(bProAdapter);
+
+		float priceTotal = 0.0f;
+		float zs_f = 0.0f;
+		float yshj_f = 0.0f;
+		float ml_f = 0.0f;
+		for (HaveProductBean item : mHaveDishList) {
+			
+			if (item.getStatus() != 3) {// 已下单 不是退菜
+				priceTotal += item.getPrice() * item.getCnt();
+			}
+
+			if (item.getStatus() == 2) {
+				zs_f += item.getPrice() * item.getCnt();
+			}
+
+		}
+		yshj_f = priceTotal - zs_f;
+		ml_f = yshj_f - (int) yshj_f;
+		yj_tv.setText("￥" + Constans.DF.format(priceTotal));
+		zsje_tv.setText("￥" + Constans.DF.format(zs_f));
+		ml_tv.setText("￥" + Constans.DF.format(ml_f));
+		ysje_tv.setText("￥" + Constans.DF.format(yshj_f - ml_f));
+		ysje = (yshj_f - ml_f) + "";
+		mling = yshj_f - (int) yshj_f + "";
+		FrameLog.e(tag,ysje + "***********");
+	}
+
+	private void doFetchProduceAll() {
+		if (SysWorkTools.isNetAvailable()) {
+			DataFetchManager.getInstance().fetchDinnerList(
+					mTable.getFloorcode(), mTable.getCode(), mTable.getLsh(),
+					new FetchListener() {
+
+						@Override
+						public void onPreFetch() {
+							showLoading(true);
+						}
+
+						@SuppressWarnings("unchecked")
+						@Override
+						public void onPostFetch(int status, Object... result) {
+							showLoading(false);
+
+							if (status == FetchListener.STATUS_OK) {
+								mHaveDishList = (List<HaveProductBean>) result[0];
+								String remarks = (String) result[1];
+								String waiterCode = (String) result[3];
+								String waiterName = (String) result[4];
+								if (!TextUtils.isEmpty(waiterName)
+										&& !waiterName
+												.equals(PrefsConfig.workerName)) {
+									operName_tv.setText("服务员：" + waiterName);
+								}
+								// refrashHaveProductUI(remarks);
+								reFreshUI(mHaveDishList);
+							} else {
+								String msg = (String) result[0];
+								SysWorkTools.showToast(getActivity(), msg);
+							}
+						}
+					});
+		} else {
+			SysWorkTools.showToast(getActivity(), "请检查网络");
+		}
+	}
+
+	public static int randomNum() {
+		Random random = new Random();
+
+		int x = random.nextInt(8999);
+
+		return x + 1000;
+	}
+
+	private void showLoading(boolean bShow) {
+		try {
+			((MainActivity) getActivity()).showLoading(bShow);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected String getTitle() {
+		// TODO Auto-generated method stub
+		return "结账";
+	}
+
+	@Override
+	protected int getMenuResId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		HomeBroadcastReceiver.unregisterIDataTransfer(this);
+	}
+
+	@Override
+	public void onDataTransfer(int type, Object... data) {
+		// TODO Auto-generated method stub
+		if (type == Constans.TYPE_BILL_DOWN) {
+			getActivity().getSupportFragmentManager().popBackStack();
+		}
+	}
+
+}

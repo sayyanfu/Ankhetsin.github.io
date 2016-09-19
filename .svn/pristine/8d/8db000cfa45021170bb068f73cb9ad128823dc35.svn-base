@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="tab_panel_height">45dp</dimen>
+    <dimen name="nav_toppanel_height">45dp</dimen>
+    <dimen name="main_title_bar_height">42dp</dimen>
+    <dimen name="tv_ok_height">30dp</dimen>
+    <dimen name="main_shop_name_size">17sp</dimen>
+    <dimen name="main_viewpager_title_bar">32dp</dimen>
+    <dimen name="main_et_search_bar_height">35dp</dimen>
+    <dimen name="table_width">70dp</dimen>
+    <dimen name="title_high">48dp</dimen>
+    <dimen name="title_text_size">19sp</dimen>
+    <dimen name="dialog_btn_width">100dp</dimen>
+    <dimen name="dialog_btn_height">40dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
+    <dimen name="dialog_height">200dp</dimen>
+    <dimen name="dialog_height_ht">300dp</dimen>
+    <dimen name="dialog_height_zengcai">250dp</dimen>
+    <dimen name="dialog_height_input_cnt">200dp</dimen>
+    <dimen name="opentable_btn_height">50dp</dimen>
+    <dimen name="whole_remarks_btn_width">350dp</dimen>
+    <dimen name="whole_remarks_btn_height">50dp</dimen>
+    <dimen name="remark_input_height">190dp</dimen>
+    <dimen name="search_tip_list_item_height">37dp</dimen>
+	<dimen name="search_hotword_margin">3dp</dimen>
+    <dimen name="search_hotword_textSize">15sp</dimen>
+    <dimen name="list_view_item_height">70dp</dimen>
+    <dimen name="list_view_item_msg_height">60dp</dimen>
+    <dimen name="list_view_item_py_tag">50dp</dimen>
+    
+     <dimen name="opentable_btn_width">130dp</dimen>
+     <dimen name="navdrawer_width">180dp</dimen>
+     <dimen name="dialog_height_choose_table">450dp</dimen>
+	<dimen name="dialog_listview_height">100dp</dimen></resources>

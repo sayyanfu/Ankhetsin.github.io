@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg">
+    
+    <com.chihuobao.kuaidian.ui.uisupport.AutoBreakLayout
+		  android:layout_alignParentTop="true"
+	      android:layout_marginTop="30dp"
+          android:id="@+id/remarks_auto_break"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+    </com.chihuobao.kuaidian.ui.uisupport.AutoBreakLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp" >
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/remark_input_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/remark_input_height"
+                android:background="@drawable/bg_remark_input"
+                android:gravity="left"
+                android:hint="请输入自定义备注"
+                android:inputType="text"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:maxLines="5"
+                android:maxLength="50" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/sure_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/whole_remarks_btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="确 定"
+        android:textSize="17sp"
+        android:textColor="@drawable/selector_color_sure_wholeremarks"
+        android:background="@drawable/selector_bg_black"/>
+
+</RelativeLayout>

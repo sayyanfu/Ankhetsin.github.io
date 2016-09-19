@@ -1,0 +1,93 @@
+package com.chihuobao.kuaidian.constans;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+
+import android.os.Environment;
+
+public class Constans {
+	
+	public static final String PACKAGE_NAME="com.chihuobao.kuaidian";
+	public static final String DB_NAME="client.db";
+	
+	public static final int DBVERSION=1;
+	public static final String DB_PATH = "/data"
+            + Environment.getDataDirectory().getAbsolutePath() + "/"+ PACKAGE_NAME;
+//	public static final String DBPATH=SysInfo.getDirManager().getDirPath(DirType.DB);
+	//// 状态(0空闲，1占用，2禁用，3待清)
+	public static final int TABLE_IDLE = 0;
+	public static final int TABLE_INUSE = 1;
+	public static final int TABLE_DISABLE = 2;
+	public static final int TABLE_CLEAN = 3;
+	public static final String SOURCE_FROM = "2"; //点菜时用，小二筷点为2
+	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+	public static SimpleDateFormat D_FORMAT_HM = new SimpleDateFormat("HH:mm");
+	public static DecimalFormat DF = new DecimalFormat("#0.00");  
+	
+	public static final String ACTION_RECEIVER_TAI_STATUS = "action.receiver.tai.status";
+	public static final String ACTION_RECEIVER_TING_STATUS = "action.receiver.ting.status";
+	public static final String ACTION_RECEIVER_PRODUCT_TASTE_EDIT = "action.receiver.product.taste.edit";
+	public static final String ACTION_RECEIVER_PRODUCT_EDIT = "action.receiver.product.edit";
+	public static final String ACTION_RECEIVER_PRODUCT_TYPE_EDIT = "action.receiver.product.type.edit";
+	public static final String ACTION_RECEIVER_PRODUCT_RESON_ZENG = "action.receiver.product.reson.zeng";
+	public static final String ACTION_RECEIVER_PRODUCT_RESON_TUI = "action.receiver.product.reson.tui";
+	public static final String ACTION_RECEIVER_PRODUCT_STATUS= "action.receiver.product.status";
+	public static final String ACTION_RECEIVER_POS_LS_DC= "action.receiver.pos.ls.dc";
+	public static final String ACTION_RECEIVER_MEAL_TIME= "action.receiver.meal.time";
+	public static final String ACTION_RECEIVER_LOGOUT = "action.receiver.logout";
+	public static final String ACTION_RECEIVER_PUSH_MSG = "action.receiver.push.msg"; 
+	public static final String NOW_WAIT_STAUS = "now_wait_status";
+	
+
+	public static final String SHOP_ID = "shop_id"; //商铺id
+	public static final String TABLE_ID = "table_id"; //台编号
+	public static final String INIT_DEV_NUM = "123456"; //初始设备密码
+	public static final String LOGOUT = "logout"; //登出
+	public static final String CANTEEN  = "1";//堂食
+	public static final String PARAM_TABLE_OLD = "param_table_old";
+	public static final String TAKE_ORDER_POSITION = "take_order_posion";
+	public static final String WAIT_STATUS_TASTE = "wait_status_taste";
+
+	
+	public static final int SP_Pro_Type = 0;
+	public static final int SP_Shop_Floor = 1;
+	public static final int SP_Shop_Diningtable = 2;
+	public static final int SP_NORMAL = 3;
+	
+	public static final String KEY_BILL = "key.bill";
+	public static final String KEY_TABLE_INFO = "key.table.info";
+	public static final String KEY_ERR_CAMERA = "key_err_camera";
+	public static final String KEY_PRO_DETAIL = "key_pro_detail";
+	public static final String KEY_PRO_DIALOG_TYPE = "key_pro_dialog_type";
+	public static final String KEY_MSG_ITEM = "key_msg_item";
+	public static final String KEY_ORDER_LIST = "key_order_list";
+	public static final String KEY_TASTE = "key_taste";
+	public static final String KEY_PRO_CNT = "key_pro_cnt";
+	public static final String KEY_PRO_POSITION = "key_pro_position";
+	public static final String KEY_TABLE_FROM = "key_table_from";
+	public static final String KEY_LSLSH = "key_lslsh";
+	public static final String KEY_TABLE_PERSON_CNT = "key.table.person.cnt";
+	public static final String KEY_REMARK = "key.remark";
+	
+	public static final int TYPE_WHOLE_TASTE = 0; //整单备注
+	public static final int TYPE_SINGLE_TASTE = 1; //单品备注
+	public static final int TYPE_ORDER_PRO_ADD_SUB = 2;
+	public static final int TYPE_TABLE_CHANGED = 3;
+	public static final int TYPE_ZHUANCAI_SUCC = 4;
+	public static final int TYPE_TUICAI_SUCC = 5;
+	public static final int TYPE_ZENGCAI_SUCC = 6;
+	public static final int TYPE_GAIDAN_SUCC = 13;
+	public static final int TYPE_MENU_PRO_ADD_SUB = 7; 
+	public static final int TYPE_ADD_PRO_LIST = 8;
+	public static final int TYPE_INPUT_PRO_CNT = 9;
+	public static final int TYPE_CHOOSE_TABLE = 10;
+	public static final int TYPE_MSG_TAKE_ORDER_SUCC = 11;
+	public static final int TYPE_TABLE_SEARCH = 12;
+	public static final int TYPE_OPEN_TABLE = 14;
+	public static final int TYPE_SUCCESS_ORDER_DISH = 15;
+	public static final int TYPE_CHANGE_WORKNAME = 16;
+	public static final int TYPE_MSG_DELETE = 17;
+	public static final int TYPE_BILL_DOWN = 18;
+	
+	
+}

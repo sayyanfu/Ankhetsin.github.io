@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sdcard_watcher"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/black"
+    >
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:orientation="vertical"
+		>
+	    <ImageView
+	    	android:id="@+id/sdcard"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="center_horizontal"
+	    	android:src="@drawable/ic_no_sdcard"
+	    	android:gravity="center"
+	    	/>
+	    <TextView
+	    	android:id="@+id/sdcard_watcher_warning"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="center_horizontal"
+	    	android:text="@string/do_not_have_sdcard"
+	    	android:textColor="@color/no_sdcard_color"
+	    	android:layout_marginTop="30dp"
+	    	android:textSize="20sp"
+	    	/>
+	</LinearLayout>
+</RelativeLayout>

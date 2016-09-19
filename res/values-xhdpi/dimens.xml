@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="tab_panel_height">45dp</dimen>
+    <dimen name="nav_toppanel_height">45dp</dimen>
+    <dimen name="main_title_bar_height">42dp</dimen>
+    <dimen name="tv_ok_height">30dp</dimen>
+    <dimen name="table_width">75dp</dimen>
+    
+</resources>

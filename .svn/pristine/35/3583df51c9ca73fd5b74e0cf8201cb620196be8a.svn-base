@@ -1,0 +1,140 @@
+package com.chihuobao.kuaidian.base.bean;
+
+import com.chihuobao.kuaidian.base.utils.SysWorkTools;
+
+/**
+ * 开台提交数据
+ */
+public class OpenTableData {
+
+	private String tingbh;// 楼层编号
+	private String taibh;// 座位编号
+	private String lsh;// 流水号
+	private String waiterCode;// 服务员编号
+	private String waiterName;// 服务员名字
+	private String yxjlCode;// 营销经理编号
+	private String yxjlName;// 营销经理名字
+	private String personCnt;// 人数
+	private String mealName;// 午餐 或 晚餐
+	private String saleType;// 销售类型 外卖或堂食 1代表堂食 2代表 外卖
+	private String tingName;// 楼层名称
+	private String taiName;// 桌位名称
+
+	
+	
+	public OpenTableData() {
+	}
+	public OpenTableData(Canyin_Shop_Diningtable table) {
+		this.tingbh = table.getFloorcode();
+		this.taibh = table.getCode();
+		this.lsh = String.valueOf(System.currentTimeMillis() + SysWorkTools.randomNum());
+		table.setLsh(this.lsh);
+		
+		this.waiterCode = "";
+		this.waiterName = "";
+		this.yxjlCode = "";
+		this.yxjlName = "";
+		this.saleType = "";
+		this.tingName = table.getFloorName();
+		this.taiName = table.getDtablename();
+		
+	}
+
+	public String getTingbh() {
+		return tingbh;
+	}
+
+	public void setTingbh(String tingbh) {
+		this.tingbh = tingbh;
+	}
+
+	public String getTaibh() {
+		return taibh;
+	}
+
+	public void setTaibh(String taibh) {
+		this.taibh = taibh;
+	}
+
+	public String getLsh() {
+		return lsh;
+	}
+
+	public void setLsh(String lsh) {
+		this.lsh = lsh;
+	}
+
+	public String getWaiterCode() {
+		return waiterCode;
+	}
+
+	public void setWaiterCode(String waiterCode) {
+		this.waiterCode = waiterCode;
+	}
+
+	public String getWaiterName() {
+		return waiterName;
+	}
+
+	public void setWaiterName(String waiterName) {
+		this.waiterName = waiterName;
+	}
+
+	public String getYxjlCode() {
+		return yxjlCode;
+	}
+
+	public void setYxjlCode(String yxjlCode) {
+		this.yxjlCode = yxjlCode;
+	}
+
+	public String getYxjlName() {
+		return yxjlName;
+	}
+
+	public void setYxjlName(String yxjlName) {
+		this.yxjlName = yxjlName;
+	}
+
+	public String getPersonCnt() {
+		return personCnt;
+	}
+
+	public void setPersonCnt(String personCnt) {
+		this.personCnt = personCnt;
+	}
+
+	public String getMealName() {
+		return mealName;
+	}
+
+	public void setMealName(String mealName) {
+		this.mealName = mealName;
+	}
+
+	public String getSaleType() {
+		return saleType;
+	}
+
+	public void setSaleType(String saleType) {
+		this.saleType = saleType;
+	}
+
+	public String getTingName() {
+		return tingName;
+	}
+
+	public void setTingName(String tingName) {
+		this.tingName = tingName;
+	}
+
+	public String getTaiName() {
+		return taiName;
+	}
+
+	public void setTaiName(String taiName) {
+		this.taiName = taiName;
+	}
+
+
+}

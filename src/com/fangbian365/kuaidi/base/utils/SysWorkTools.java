@@ -1,0 +1,767 @@
+package com.fangbian365.kuaidi.base.utils;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.provider.Settings.Secure;
+import android.support.v4.app.FragmentActivity;
+import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.base.CHBApp;
+import com.fangbian365.kuaidi.base.bean.Canyin_Shop_Mealstime;
+import com.fangbian365.kuaidi.base.log.FrameLog;
+
+public class SysWorkTools {
+	public final static int NETTYPE_NO = 10;
+	public final static int NETTYPE_UNKNOWN = 20;
+
+	public final static int NETTYPE_2G = 1;
+	public final static int NETTYPE_3G = 3;
+	public final static int NETTYPE_WIFI = 2;
+	public final static int NETTYPE_4G = 4;
+	private static DbManager dbManager;
+	private static final String TAG = "SysWorkTools";
+	/*
+	 * 
+	 * public static final int NETTYPE_WIFI = 1; public static final int
+	 * NETTYPE_2G = 2; public static final int NETTYPE_3G = 3;
+	 */
+
+	public static NetworkInfo getNetworkInfo(Context context) {
+		if (context == null) {
+			return null;
+		}
+
+		ConnectivityManager connectivity = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity == null) {
+			return null;
+		} else {
+			NetworkInfo info = connectivity.getActiveNetworkInfo();
+			return info;
+		}
+	}
+
+	/**
+	 * 获取现在时间
+	 * 
+	 * @return 返回时间类型 yyyy-MM-dd HH:mm:ss
+	 */
+	public static String getNowDate() {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+		return df.format(new Date());// new Date()为获取当前系统时间
+
+	}
+
+	/**
+	 * 获取某一表中
+	 * 
+	 * @return
+	 */
+	public static <T> T getTableListForStatus(Class<T> classBean,
+			String moneyPrinterKey,String likeStr) {
+
+		try {
+			return CHBApp.getInstance().getDbManager().selector(classBean)
+					.where(moneyPrinterKey, "like", likeStr).findFirst();
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 显示就餐时间
+	 */
+	public static String showEatTime() {
+		dbManager = CHBApp.getInstance().getDbManager();
+		List<Canyin_Shop_Mealstime> mMealsTime = null;
+		try {
+			mMealsTime = dbManager.selector(Canyin_Shop_Mealstime.class).findAll();
+		} catch (DbException e) {
+			e.printStackTrace();
+			Log.e(TAG, "查询市别错误", e);
+		}
+		
+		Calendar cal = Calendar.getInstance();// 当前日期
+		int hour = cal.get(Calendar.HOUR_OF_DAY);// 获取小时
+		int minute = cal.get(Calendar.MINUTE);// 获取分钟
+		int minuteOfDay = hour * 60 + minute;// 从0:00分开是到目前为止的分钟数
+		if (mMealsTime != null) {
+			for (int i = 0;i < mMealsTime.size();i++) {
+				Canyin_Shop_Mealstime  item = mMealsTime.get(i);
+				String[] startTime = item.getStarttime().split(":");
+				int sMinute = disZero(startTime[0]) * 60 + disZero(startTime[1]);
+				String[] endTime = item.getEndtime().split(":");
+				int eMinute = disZero(endTime[0]) * 60 + disZero(endTime[1]);
+			/*	if ((i == 0) && (minuteOfDay < sMinute)) {
+					return item.getEndtime();
+				}else if (minuteOfDay > eMinute) {
+					return item.getEndtime();
+				}*/
+				if (minuteOfDay >= sMinute && minuteOfDay <= eMinute) {
+					return item.getMealname();
+				}
+			}
+			
+		}
+		
+	/*	if (minuteOfDay >= Constans.LUNCH_TIME_BEGIN
+				&& minuteOfDay <= Constans.LUNCH_TIME_END) {
+			mEatTime = "午餐";
+		} else if (minuteOfDay >= Constans.DINNER_TIME_BEGIN
+				&& minuteOfDay <= Constans.DINNER_TIME_END) {
+			mEatTime = "晚餐";
+		}*/
+		return "";
+	}
+	
+	public static int disZero(String num){
+		if (num.startsWith("0")) {
+			return Integer.parseInt(num.substring(1, num.length()));
+		}
+		return Integer.parseInt(num);
+	}
+	
+	public static int randomNum() {
+		Random random = new Random();
+
+		int x = random.nextInt(8999);
+
+		return x + 1000;
+	}
+
+	/**
+	 * 显示Toast菜单
+	 */
+	public static void showToast(Context context, String showString) {
+		try {
+			if(!TextUtils.isEmpty(showString)) {
+				Toast.makeText(context, showString, Toast.LENGTH_SHORT).show();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static float getDeviceDensity(FragmentActivity activity) {
+		DisplayMetrics dm = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		return dm.density;
+	}
+
+	/**
+	 * 隐藏软键盘
+	 * 
+	 * @param context
+	 *            上下文
+	 */
+	public static void closeKeyboard(Activity context) {
+		try {
+			InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void closeKeyboard(View windowView) {
+		if (windowView == null) {
+			return ;
+		}
+		try {
+			Context context = windowView.getContext();		
+	        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.hideSoftInputFromWindow(windowView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+    }
+	
+	// 将list按blockSize大小等分，最后多余的单独一份
+	public static <T> List<List<T>> subList(List<T> list, int blockSize) {
+		List<List<T>> lists = new ArrayList<List<T>>();
+		if (list != null && blockSize > 0) {
+			int listSize = list.size();
+			if (listSize <= blockSize) {
+				lists.add(list);
+				return lists; 
+			}
+			int batchSize = listSize / blockSize;
+			int remain = listSize % blockSize;
+			for (int i = 0; i < batchSize; i++) {
+				int fromIndex = i * blockSize;
+				int toIndex = fromIndex + blockSize;
+				lists.add(list.subList(fromIndex, toIndex));
+			}
+			if (remain > 0) {
+				lists.add(list.subList(listSize - remain, listSize));
+			}
+		}
+		return lists;
+	}
+
+	/**
+	 * 判断网络是否可用
+	 * 
+	 * @param bHint
+	 *            是否弹出提示标志位
+	 * @return 网络是否可用
+	 */
+	public static boolean isNetAvailable() {
+		boolean flag = false;
+
+		ConnectivityManager cwjManager = (ConnectivityManager) CHBApp
+				.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = cwjManager.getActiveNetworkInfo();
+		if (cwjManager != null && networkInfo != null)
+			flag = networkInfo.isAvailable();
+		// flag = cwjManager.getActiveNetworkInfo().isConnectedOrConnecting();
+
+		return flag;
+	}
+
+	/**
+	 * 是否是蜂窝网络
+	 * 
+	 * @return
+	 */
+	public static boolean isCellularNet() {
+		if (getNetType() == NETTYPE_2G || getNetType() == NETTYPE_3G
+				|| getNetType() == NETTYPE_4G) {
+			return true;
+		} else
+			return false;
+	}
+
+	public static String getNetTypeString() {
+		int netType = getNetType();
+		String netString = "无网络";
+		switch (netType) {
+		case NETTYPE_2G:
+			netString = "2G";
+			break;
+
+		case NETTYPE_3G:
+			netString = "3G";
+			break;
+
+		case NETTYPE_4G:
+			netString = "4G";
+			break;
+
+		case NETTYPE_WIFI:
+			netString = "Wifi";
+			break;
+		case NETTYPE_UNKNOWN:
+			netString = "未知网络";
+			break;
+		default:
+			break;
+		}
+		return netString;
+	}
+
+	// <获取联网方式
+	public static int getNetType() {
+		int netType = NETTYPE_NO; // 默认是2G网络
+		Context context = CHBApp.getAppContext();
+		if (context == null) {
+			return netType;
+		}
+
+		ConnectivityManager cwjManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (cwjManager != null) {
+			NetworkInfo networkInfo = cwjManager.getActiveNetworkInfo();
+
+			if (networkInfo != null) {
+				if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+					netType = getMobileNetworkType(networkInfo.getSubtype());
+
+				} else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+					netType = NETTYPE_WIFI;
+				}
+			}
+		}
+
+		return netType;
+	}
+
+	/**
+	 * 是否是wifi网络
+	 * 
+	 * @return
+	 */
+	public static boolean isWifi() {
+		return SysWorkTools.getNetType() == SysWorkTools.NETTYPE_WIFI;
+	}
+
+	private static int getMobileNetworkType(int networkType) {
+		switch (networkType) {
+		case TelephonyManager.NETWORK_TYPE_GPRS:
+		case TelephonyManager.NETWORK_TYPE_EDGE:
+		case TelephonyManager.NETWORK_TYPE_CDMA:
+		case TelephonyManager.NETWORK_TYPE_1xRTT:
+		case TelephonyManager.NETWORK_TYPE_IDEN:
+
+			return NETTYPE_2G;
+		case TelephonyManager.NETWORK_TYPE_UMTS:
+		case TelephonyManager.NETWORK_TYPE_EVDO_0:
+		case TelephonyManager.NETWORK_TYPE_EVDO_A:
+		case TelephonyManager.NETWORK_TYPE_HSDPA:
+		case TelephonyManager.NETWORK_TYPE_HSUPA:
+		case TelephonyManager.NETWORK_TYPE_HSPA:
+		case TelephonyManager.NETWORK_TYPE_EVDO_B:
+		case TelephonyManager.NETWORK_TYPE_EHRPD:
+		case TelephonyManager.NETWORK_TYPE_HSPAP:
+			return NETTYPE_3G;
+		case TelephonyManager.NETWORK_TYPE_LTE:
+			return NETTYPE_4G;
+		default:
+			return NETTYPE_UNKNOWN;
+		}
+	}
+
+	public static boolean isGPSEnable() {
+		Context context = CHBApp.getAppContext();
+		if (context == null)// 从UMeng日志里分析这里可能为null 12-29
+			return false;
+
+		LocationManager alm = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		if (alm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * 得到设备的Imei号
+	 */
+	public static String getImei() {
+
+		Context context = CHBApp.getAppContext();
+		TelephonyManager tm = (TelephonyManager) context
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		String iMei = checkDeviceID(tm.getDeviceId());
+
+		return iMei;
+	}
+
+	public static String getImsi() {
+		TelephonyManager tm = (TelephonyManager) CHBApp.getAppContext()
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		String imsi = tm.getSubscriberId();
+		return imsi;
+	}
+
+	protected static final String PREFS_FILE = "gank_device_id.xml";
+	protected static final String PREFS_DEVICE_ID = "gank_device_id";
+	protected static String uuid;
+
+	public static String getOpenUDID() {
+		if (uuid == null) {
+			synchronized (SysWorkTools.class) {
+				if (uuid == null) {
+
+					final String androidId = Secure.getString(CHBApp
+							.getAppContext().getContentResolver(),
+							Secure.ANDROID_ID);
+
+					// Use the Android ID unless it's broken, in which case
+					// fallback on deviceId,
+					// unless it's not available, then fallback on a random
+					// number which we store
+					// to a prefs file
+					try {
+						if (!"9774d56d682e549c".equals(androidId)) {
+							uuid = UUID.nameUUIDFromBytes(
+									androidId.getBytes("utf8")).toString();
+						} else {
+							final String deviceId = ((TelephonyManager) CHBApp
+									.getAppContext().getSystemService(
+											Context.TELEPHONY_SERVICE))
+									.getDeviceId();
+							uuid = deviceId != null ? UUID.nameUUIDFromBytes(
+									deviceId.getBytes("utf8")).toString()
+									: UUID.randomUUID().toString();
+						}
+					} catch (UnsupportedEncodingException e) {
+						throw new RuntimeException(e);
+					}
+
+				}
+			}
+		}
+		return uuid;
+	}
+
+	static String macAddress = null;
+
+	/**
+	 * 获得应用的mac地址
+	 */
+	public static String getMacAddress() {
+
+		if (macAddress != null) {
+			return macAddress;
+		}
+		WifiManager wm = (WifiManager) CHBApp.getAppContext().getSystemService(
+				Context.WIFI_SERVICE);
+		macAddress = checkDeviceID(wm.getConnectionInfo().getMacAddress());
+
+		return macAddress;
+	}
+
+	/**
+	 * 得到设备的IP
+	 * 
+	 * @return
+	 */
+	public static String getIp() {
+		try {
+			WifiManager wifiManager = (WifiManager) CHBApp.getAppContext()
+					.getSystemService(Context.WIFI_SERVICE);
+			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+			int ipAddress = wifiInfo.getIpAddress();
+			int[] ipAddr = new int[4];
+			ipAddr[0] = ipAddress & 0xFF;
+			ipAddr[1] = (ipAddress >> 8) & 0xFF;
+			ipAddr[2] = (ipAddress >> 16) & 0xFF;
+			ipAddr[3] = (ipAddress >> 24) & 0xFF;
+			return new StringBuilder().append(ipAddr[0]).append(".")
+					.append(ipAddr[1]).append(".").append(ipAddr[2])
+					.append(".").append(ipAddr[3]).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static String checkDeviceID(String ID) {
+		if (ID != null && ID.length() > 0 && !ID.equalsIgnoreCase("Unknown")
+				&& !ID.equalsIgnoreCase("004999010640000")
+				&& !ID.equalsIgnoreCase("0x00000000")
+				&& 0 != ID.replace("0", "").length()) {
+
+			return ID;
+		}
+
+		return null;
+	}
+
+	/**
+	 * 返回当前程序版本名
+	 */
+	public static String getAppVersionName(Context context) {
+		String versionName = "";
+		try {
+			// ---get the package info---
+			PackageManager pm = context.getPackageManager();
+			PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+			versionName = pi.versionName;
+			if (versionName == null || versionName.length() <= 0) {
+				return "";
+			}
+		} catch (Exception e) {
+			Log.e("VersionInfo", "Exception", e);
+		}
+		return versionName;
+	}
+
+	/**
+	 * 返回当前程序版本号
+	 */
+	public static int getAppVersionCode(Context context) {
+		int versionCode = -1;
+		try {
+			// ---get the package info---
+			PackageManager pm = context.getPackageManager();
+			PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+			versionCode = pi.versionCode;
+		} catch (Exception e) {
+			FrameLog.e("VersionInfo", e);
+			return -1;
+		}
+		return versionCode;
+	}
+
+	/**
+	 * 获取分辨率
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static String getResolutoin(Context context) {
+
+		// DisplayMetrics metrics = new DisplayMetrics();
+		WindowManager WM = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+
+		Display display = WM.getDefaultDisplay();
+
+		if (display.getWidth() > display.getHeight()) {
+			return display.getHeight() + "_" + display.getWidth();
+		}
+
+		return display.getWidth() + "_" + display.getHeight();
+	}
+
+	/**
+	 * 检查系统”媒体音量“是否为零，若为零设置一个默认值；
+	 */
+	public static void checkMusicVolume(Context context) {
+		AudioManager mAudioManager = (AudioManager) context
+				.getSystemService(Context.AUDIO_SERVICE);
+		// 音乐音量（媒体音量的设置）
+		int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		int current = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		if (current < max / 3)
+			mAudioManager
+					.setStreamVolume(AudioManager.STREAM_MUSIC, max / 2, 0);
+	}
+
+	// <判断是否存在SD卡
+	public static boolean isSDCardExist() {
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 手机型号
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static String getPhoneModel(Context context) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(Build.MODEL);
+
+		return sb.toString();
+	}
+
+	/**
+	 * encode string
+	 *
+	 * @param algorithm
+	 * @param str
+	 * @return String
+	 */
+	public static String encode(String algorithm, String str) {
+		if (str == null) {
+			return null;
+		}
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+			messageDigest.update(str.getBytes());
+			return getFormattedText(messageDigest.digest());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+	private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5',
+		'6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+	/**
+	 * Takes the raw bytes from the digest and formats them correct.
+	 *
+	 * @param bytes
+	 *            the raw bytes from the digest.
+	 * @return the formatted bytes.
+	 */
+	private static String getFormattedText(byte[] bytes) {
+		int len = bytes.length;
+		StringBuilder buf = new StringBuilder();
+		// 把密文转换成十六进制的字符串形式
+		for (int j = 0; j < len; j++) { 			
+			buf.append(HEX_DIGITS[(bytes[j] >> 4) & 0x0f]);
+			buf.append(HEX_DIGITS[bytes[j] & 0x0f]);
+		}
+		return buf.toString();
+	}
+	
+	public static String md5(String plainText) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(plainText.getBytes());
+			byte b[] = md.digest();
+
+			int i;
+
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+
+			return buf.toString();
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	/**
+	 * 替换逗号为空格
+	 * @param str
+	 * @return
+	 */
+	public static String containComma(String str){
+		
+		Pattern pattern = Pattern.compile(","); 
+		Matcher matcher = pattern.matcher(str); 
+		return matcher.replaceAll("，"); 
+	}
+	
+	/**
+	 * 判断是否纯字母
+	 * @param str
+	 * @return
+	 */
+	public static boolean isPureAlphabet(String str){
+		Pattern pattern = Pattern.compile("^[A-Za-z]+$"); 
+		Matcher matcher = pattern.matcher(str); 
+		return matcher.matches(); 
+		
+	}
+	
+	public static int dp2px(Context context, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+        		context.getResources().getDisplayMetrics());
+    }
+	
+	public static int getPinyinBg(String pinyin) {
+		if(pinyin.equals("A") || pinyin.equals("N")) {
+			return R.drawable.iv_pinyin_tag_an;
+		} else if(pinyin.equals("B") || pinyin.equals("O")) {
+			return R.drawable.iv_pinyin_tag_bo;
+		} else if(pinyin.equals("C") || pinyin.equals("P")) {
+			return R.drawable.iv_pinyin_tag_cp;
+		} else if(pinyin.equals("D") || pinyin.equals("Q")) {
+			return R.drawable.iv_pinyin_tag_dq;
+		} else if(pinyin.equals("E") || pinyin.equals("R")) {
+			return R.drawable.iv_pinyin_tag_er;
+		} else if(pinyin.equals("F") || pinyin.equals("S")) {
+			return R.drawable.iv_pinyin_tag_fs;
+		} else if(pinyin.equals("G") || pinyin.equals("T")) {
+			return R.drawable.iv_pinyin_tag_gt;
+		} else if(pinyin.equals("H") || pinyin.equals("U")) {
+			return R.drawable.iv_pinyin_tag_hu;
+		} else if(pinyin.equals("I") || pinyin.equals("V")) {
+			return R.drawable.iv_pinyin_tag_iv;
+		} else if(pinyin.equals("J") || pinyin.equals("W")) {
+			return R.drawable.iv_pinyin_tag_jw;
+		} else if(pinyin.equals("K") || pinyin.equals("X")) {
+			return R.drawable.iv_pinyin_tag_kx;
+		} else if(pinyin.equals("L") || pinyin.equals("Y")) {
+			return R.drawable.iv_pinyin_tag_ly;
+		} else if(pinyin.equals("M") || pinyin.equals("Z")) {
+			return R.drawable.iv_pinyin_tag_mz;
+		} else {
+			return R.drawable.iv_pinyin_tag_an;
+		}
+	}
+	
+	/**
+	 * 设置输入框输入的小数位数不能超过1位
+	 * 
+	 * @param editText
+	 *            需要判断的输入框
+	 */
+	public static void setPricePoint(final EditText editText) {
+		editText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO 从“.”后开始判断，如果长度大于1，则不能再输入数字
+				if (s.toString().contains(".")) {
+					if (s.length() - 1 - s.toString().indexOf(".") > 1) {
+						s = s.toString().subSequence(0,
+								s.toString().indexOf(".") + 2);
+						editText.setText(s);
+						editText.setSelection(s.length());
+					}
+				}
+				if (s.toString().trim().substring(0).equals(".")) {
+					s = "0" + s;
+					editText.setText(s);
+					editText.setSelection(2);
+				}
+
+				if (s.toString().startsWith("0")
+						&& s.toString().trim().length() > 1) {
+					if (!s.toString().substring(1, 2).equals(".")) {
+						editText.setText(s.subSequence(0, 1));
+						editText.setSelection(1);
+						return;
+					}
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+}

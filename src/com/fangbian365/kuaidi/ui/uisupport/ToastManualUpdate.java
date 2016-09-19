@@ -1,0 +1,63 @@
+package com.fangbian365.kuaidi.ui.uisupport;
+
+import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.fangbian365.kuaidi.R;
+import com.fangbian365.kuaidi.ui.activity.BindShopActivity;
+
+public class ToastManualUpdate {
+
+	private static ToastManualUpdate toastCommom;
+
+	private Toast toast;
+
+	private ToastManualUpdate() {}
+
+	public static ToastManualUpdate createToastConfig() {
+		if (toastCommom == null) {
+			toastCommom = new ToastManualUpdate();
+		}
+		return toastCommom;
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @param isImgShow
+	 * @param root
+	 * @param resId
+	 * @param tvString
+	 */
+	public void Show(final Context context,final boolean isImgShow, final ViewGroup root,final int resId, final String tvString) {
+		((BindShopActivity) context).runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				View layout = LayoutInflater.from(context).inflate(R.layout.layout_manual_update, root);
+				TextView text = (TextView) layout.findViewById(R.id.layout_manual_update_Tv);
+				ImageView mImageView = (ImageView) layout.findViewById(R.id.layout_manual_update_Iv);
+				if (isImgShow) {
+					mImageView.setVisibility(View.VISIBLE);
+					mImageView.setBackgroundResource(resId);
+				}else {
+					mImageView.setVisibility(View.GONE);
+				}
+				text.setText(tvString);
+				toast = new Toast(context);
+				toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+				toast.setDuration(Toast.LENGTH_SHORT);
+				toast.setView(layout);
+				toast.show();
+			}
+		});
+		
+	}
+
+}

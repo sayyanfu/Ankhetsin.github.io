@@ -1,0 +1,27 @@
+package com.chihuobao.kuaidian.mod.asynctask.download.threadpool;
+
+import android.os.Process;
+import android.text.TextUtils;
+
+import com.chihuobao.kuaidian.mod.asynctask.download.http.DownloadHttpListener;
+import com.chihuobao.kuaidian.mod.asynctask.download.http.HttpProvider;
+
+public class ThreadPoolAppTask extends ThreadPoolTask {
+
+	private DownloadHttpListener mDownloadHttpListener;
+	
+	public ThreadPoolAppTask(String url, DownloadHttpListener listener) {
+		super(url);
+		mDownloadHttpListener = listener;
+	}
+
+	@Override
+	public void run() {
+		Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+		
+		if(!TextUtils.isEmpty(getURL())) {
+			HttpProvider.doGet(getURL(), mDownloadHttpListener);
+		}
+	}
+
+}

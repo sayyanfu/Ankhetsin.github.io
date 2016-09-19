@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/layout_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_height_choose_table"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_sure_order" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp" >
+
+            <LinearLayout
+                android:id="@+id/layout_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_sure"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_yellow"
+                    android:gravity="center"
+                    android:text="确认下单"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_cancle"
+                    android:layout_width="@dimen/dialog_btn_width"
+                    android:layout_height="@dimen/dialog_btn_height"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/selector_bg_red"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_hall_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_title_bar_height"
+            android:layout_below="@id/layout_user_bar" >
+
+            <ImageView
+                android:id="@+id/iv_hall_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/iv_hall_left" />
+
+            <ImageView
+                android:id="@+id/iv_hall_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/iv_hall_right" />
+
+            <com.chihuobao.kuaidian.ui.uisupport.PickerView
+                android:id="@+id/picker_hall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/iv_hall_right"
+                android:layout_toRightOf="@id/iv_hall_left" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/iv_common_divider_line" />
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/rg_viewpager_tab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_viewpager_title_bar"
+            android:layout_below="@id/layout_hall_bar"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <RadioButton
+                android:id="@+id/rb_all_table"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="全部"
+                android:textColor="@drawable/selector_tv_table_status"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/rb_idle_table"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="空闲"
+                android:textColor="@drawable/selector_tv_table_status"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/rb_inuse_table"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="占用"
+                android:textColor="@drawable/selector_tv_table_status"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <com.chihuobao.kuaidian.ui.uisupport.ScllorTabView
+            android:id="@+id/iv_off_tab_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/rg_viewpager_tab" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/table_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/layout_bottom"
+                android:layout_below="@id/iv_off_tab_line"
+                android:layout_marginTop="3dp" >
+            </android.support.v4.view.ViewPager>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
